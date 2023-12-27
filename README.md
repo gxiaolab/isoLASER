@@ -2,28 +2,22 @@
 [![](https://img.shields.io/badge/isoLASER-v0.0.0.1-blue)](https://test.pypi.org/project/isoLASER/)
 
 [github](https://github.com/gxiaolab/isoLASER/)
-_______________________________________
 
 ## **About**
 
-
-isoLASER performs gene-level variant calls, phasing and splicing linkage analysis using third generation RNA sequencing data.
+isoLASER performs gene-level variant calls, phasing, and splicing linkage analysis using third-generation RNA sequencing data.
 
 ## **Table of contents**
-- [Outline](#Outline)
-- [Installation](#Installation)
-- [Preprocessing](#Preprocessing)
-  - [Annotate bam file](#Annotate bam file)
-  - [Extract exonic parts from GTF](#Extract exonic parts from GTF)
-- [Run isoLASER](#Run isoLASER)
-- [Run isoLASER joint](#Run isoLASER joint)
-- [Make a nigiri plot!](#Make a nigiri plot!)
-- [Output](#Output)
-- [Debug](#Debug)
-
-
-
-## **Outline**
+- [Installation](#installation)
+- [Preprocessing](#preprocessing)
+  - [Transcript identification](#transcript-identification)
+  - [Annotate bam file](#annotate-bam-file)
+  - [Extract exonic parts from GTF](#extract-exonic-parts-from-gtf)
+- [Run isoLASER](#run-isolaser)
+- [Run isoLASER joint](#run-isolaser-joint)
+- [Make a nigiri plot](#make-a-nigiri-plot)
+- [Output](#output)
+- [Debug](#debug)
 
 
 ## **Installation**
@@ -34,9 +28,7 @@ isoLASER is available through **PyPi**. To download simply type:
 pip install isoLASER
 ```
 
-The download was tested with PyPi version >= 20.0.1.
-
-Alternatively, you can clone this **GitHub** repository:
+The download was tested with PyPi version >= 20.0.1. Alternatively, you can clone this **GitHub** repository:
 
 ```
 git clone git@github.com:gxiaolab/isoLASER.git 
@@ -57,142 +49,128 @@ If successful, the program is ready to use. The installation incorporates consol
 ```
 isoLASER --help
 ```
-_______________________________________
-
-
 
 ## *Preprocessing* 
 
 Long-read RNA sequencing is notorious for its high base-calling error rate. As such, it is important to clean and preprocess the data to discard false transcripts resulting from misalignment, bad consensus, truncation, and other technical artifacts.   
 
-isoLASER a GTF file as input, ideally built using a long read annotation software such as Talon, Clair, Bambu, Espresso, or similar. 
 
-### Talon pipeline
 
-Talon + Transcript clean 
-For more details see (link)[www.=]
+### Transcript identification
 
-```
-python TranscriptClean-2.0.4/accessory_scripts/get_SJs_from_gtf.py \
-                        --f {input.gtf} \
-                        --g {input.ref} \
-                        --o {output.jxn}
+isoLASER needs a GTF file as input to annotate individual reads with their isoform membership. Ideally, this GTF file is built using a long-read annotation software such as Talon, Clair, Bambu, Espresso, or similar. 
 
-python TranscriptClean-2.0.4/TranscriptClean.py \
-                        --correctMismatches False \
-                        --correctIndels False \
-                        --threads {params.threads} \
-                        --sam {output.sam} \
-                        --genome {input.ref} \
-                        --spliceJns {input.jxn} \
-                        --outprefix {params.prefix} \
-                        --tmpDir {params.tmpdir}
+Details of the Talon pipeline can be found on their GitHub repository.[TALON](https://github.com/mortazavilab/TALON).
 
-talon_label_reads \
-                        --f {input.sam} \
-                        --g {input.ref} \
-                        --o {params.prefix} \
-                        --tmpDir {params.tmp}
-
-talon_initialize_database \
-                        --f talon/$chrom.gtf \
-                        --g {params.genome_assembly} \
-                        --a {params.annot_version} \
-                        --idprefix {params.dataset_id} \
-                        --o talon/$chrom
-
-talon \
-                        --f {output.Config} \
-                        --db {input.db} \
-                        --build {params.genome_assembly} \
-                        --threads 24 \
-                        --tmpDir {params.tmpdir} \
-                        --o {params.prefix}
-
- talon_filter_transcripts \
-                        --db {input.db} \
-                        -a {params.dataset_id} \
-                        --includeAnnot \
-                        --minCount 5 \
-                        --minDatasets 1 \
-                        --o {output.whitelist}
-
-  talon_create_GTF 
-                        --db {input.db} \
-                        -a {params.annot_version} \
-                        --build {params.genome_assembly} \
-                        --whitelist {input.whitelist} \
-                        --observed \
-                        --o {params.prefix}
-
-```
+- The pipeline consists of correcting alignments around splice junctions using `TranscriptClean`, and labeling the reads for internal priming using `talon_label_reads`. 
+- The processed bam files are then ready to be annotated by first creating a database with `talon_initialize_database` and then annotating the individual reads with `talon`. 
+- Finally, the transcripts are filtered with `talon_filter_transcripts` and a GTF file is constructed with the retained transcripts with the command `talon_create_GTF`.     
 
 
 ### Annotate bam file
 
-Obtain a reference transcriptome file to align the reads to. 
-This step serves to assign transcript ids to every read of the target bam file
+From the annotation used in the previous step, use the GTF file to generate a transcriptome reference for alignment.   
+This step serves to assign transcript ids to every read of the target bam file.
 
 ```
-isolaser_convert_gtf_to_fasta
+# generate transcriptome reference from GTF
+isolaser_convert_gtf_to_fasta -g {annot.gtf} -f {reference.fa} -o {transcriptome}
+
+# convert bam file to fastq for re-alignment
+samtools fastq {input.bam} > {input.fq}
+
+# re-align against newly generated transcriptome reference
+minimap2 -t 16 -ax splice:hq -uf --MD {transcriptome.fa} {input.fq} > {transcriptome.sam}
 ```
 
-Align agains the newly generated reference
+The output is a sam file where the contigs are transcript ids. 
+Next, filter for secondary, supplementary and trans-gene reads whilst annotating with transcript ids. 
 
 ```
-minimap2
+isolaser_filter_and_annotate -b {input.bam} -t {transcriptome.sam} -g {annot.gtf} -o {input.annot}
 ```
-
-Filter for secondary, supplementary and trans-gene reads whilst annotating with transcript ids. 
-Transcript ids and gene names are saved in the `ZG` and `ZT` tags.
-
-```
-isolaser_filter_and_annotate
-```
+The output is a bam file: `input.annot.bam` after some basic filtering (secondary and supplemental reads), trans-gene filtering and the `ZG` and `ZT` tags with the name of the corresponding gene and transcript id for each read.  
 
 ### Extract exonic parts from GTF
 
-isoLASER uses a exon-centric approach to analyze splicing and exonic-parts are great granular appraoch to understand local splicing changes. 
+isoLASER uses an exon-centric approach to analyze splicing and exonic-parts are a great granular approach to understand local splicing changes. 
 
 ```
-isolaser_extract_exonic_parts
+isolaser_extract_exonic_parts -g {annot.gtf} -o {transcript.db}
 ```
 
+The output is a new directory `transcript.db` that contains a pickle file per gene encapsulating all the exonic parts and transcripts associated with them.   
 
 ## *Run isoLASER*
 
+isoLASER requires the annotated bam file (with ZG and ZT tags), the transcriptome database with exonic parts, and a reference annotation (e.g. hg38.fa).  
+
 ```
-isoLASER -b <file.bam> -o <output_prefix> -t <transcriptome.db> -f <reference.fa>
+isoLASER -b {input.annot.bam} -o {output.prefix} -t {transcript.db} -f {reference.fa}
+
+# output:
+{output.prefix}.vcf
+{output.prefix}.mi_summary.tsv
+
 ```
 
 The output is very extensive and includes information that is only relevant for the joint analysis or plotting. 
-To obtain the significant allele-speicifc events (cis-drected splicing events) use the filter function: 
+To obtain the significant allele-specific events (cis-directed splicing events) use the filter function: 
 
 ```
-isolaser_filter -m <output_prefix.mi_summary.tsv> -o <output_prefix.mi_summary.filtered.tsv>
+isolaser_filter -m {output.prefix.mi_summary.tsv} -o {output.prefix.mi_summary.filtered.tsv}
 ```
 
 ## *Run isoLASER joint*
 
-Wrapper of GATK functions to merge the variant calls from different samples 
+The first step is a wrapper of GATK functions to merge the variant calls from different samples.
 
+The input file `fofn` contains informaiton of the individual samples
 ```
-isoLASER_combine_vcf -f <fofn.tsv> -o <output_prefix> 
+# fofn.tsv
+SM1 SM1.bam SM1.mi_summary.tsv
+SM2 SM2.bam SM2.mi_summary.tsv
+```
+Run the combine vcf step:
+```
+isoLASER_combine_vcf -f {fofn.tsv} -o {output.prefix}
+
+# output:
+{output.prefix}.combined.vcf
+{output.prefix}.genotyped.vcf
 ```
 Perform joint analysis
 ```
-isoLASER_joint -f <fofn.tsv> -o <output_prefix> -t <transcriptome.db> 
+isoLASER_joint -f {fofn.tsv} -o {output.prefix} -t {transcript.db}
+
+# output:
+{output.prefix}.merged.mi_summary.tsv
 ```
 
-## *Make a nigiri plot!*
+## *Make a nigiri plot*
+
+Parse the `.mi_summary.tsv` file to obtain the list of events to plot
 
 ```
-nigiri
-```
+isolaser_parse_mi_file --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {transcriptome.db} 
 
-## **Output**
+# output:
+{output.plot}.cis_events.bed
+{output.plot}.cis_genes.tsv
+```
+Split the bam file
+
+```
+isolaser_split_bam_by_allele -b {input.annot.bam} -v {var.string} -o {fofn} 
+```
+Plot
+```
+ggsashimi -b {fofn} -c {region} -o {output.plot} 
+```
 
 
 ## **Debug**
+If you experince any issues please submit your question to the *Issues* tab on this website. 
+
 
 
