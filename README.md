@@ -168,9 +168,10 @@ Plot
 ggsashimi -b {fofn} -c {region} -o {output.plot} 
 ```
 
+![plot](nigiri.PacBio.HLA-DPB1.ENSG00000223865.11.aorta_1.pdf)
 
 ## **Debug**
-If you experince any issues please submit your question to the *Issues* tab on this website. 
+If you experience any issues please submit your question to the *Issues* tab on this website. 
 
 
 
