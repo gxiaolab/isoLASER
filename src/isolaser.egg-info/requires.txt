@@ -1,0 +1,12 @@
+multiprocess
+numpy
+scipy==1.10.1
+pandas
+pysam
+pytabix
+pyfaidx
+biopython
+vcfpy
+HTSeq
+networkx
+scikit-learn

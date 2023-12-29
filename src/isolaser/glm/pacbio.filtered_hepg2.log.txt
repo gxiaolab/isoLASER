@@ -1,0 +1,44 @@
+Error in load(name, envir = .GlobalEnv) : 
+  bad restore file magic number (file may be corrupted) -- no data loaded
+In addition: Warning message:
+file ‘.RData’ has magic number 'RDX3'
+  Use of save versions prior to 2 is deprecated 
+During startup - Warning message:
+unable to restore saved data in .RData 
+
+
+VARIANT = INSERTION	Label count: TP=2432 FP=1370
+
+	Mean F1 = 0.85, Mean AUROC = 0.85
+		Std. Dev. F1 = 0.006, Std. Dev. AUROC = 0.008
+	coefficients: {'AB': 1.71, 'REP_COUNT': -0.05, 'ndHAP': -3.01, 'NVARS_ALT_mean': 0.01, 'MI': 2.01, 'pb': -0.05} intercept: 1.73
+
+	Writing output to pacbio.filtered_hepg2.txt.INSERTION.glm.pickle
+
+
+VARIANT = DELETION	Label count: TP=2623 FP=1254
+	WARNING: The training data set is too small = 3877
+
+	Mean F1 = 0.87, Mean AUROC = 0.85
+		Std. Dev. F1 = 0.006, Std. Dev. AUROC = 0.008
+	coefficients: {'AB': 1.98, 'REP_COUNT': -0.02, 'ndHAP': -4.32, 'NVARS_ALT_mean': 0.01, 'MI': 1.85, 'pb': -0.03} intercept: 2.13
+
+	Writing output to pacbio.filtered_hepg2.txt.DELETION.glm.pickle
+
+
+VARIANT = SNP	Label count: TP=27656 FP=2607
+	WARNING: The training data set is too small = 30263
+
+	Mean F1 = 0.95, Mean AUROC = 0.65
+		Std. Dev. F1 = 0.001, Std. Dev. AUROC = 0.009
+	coefficients: {'AB': 0.65, 'REP_COUNT': -0.11, 'ndHAP': -2.83, 'NVARS_ALT_mean': -0.1, 'MI': 0.18, 'pb': -0.01} intercept: 3.09
+
+	Writing output to pacbio.filtered_hepg2.txt.SNP.glm.pickle
+	Original: rows= 68005
+	Filtering by length: rows= 68005
+	Filtering by FILTER: rows= 59454
+	Filtering by Cov: rows= 54290
+	Filtering by A-to-G: rows= 46248
+	Filtering by T-to-C: rows= 37942
+Loading variants...
+done

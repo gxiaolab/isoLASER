@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: isolaser
+Version: 0.0.1
+Summary: Exonic Part centered allele-specific splicing analysis
+Home-page: https://github.com/gxiaolab/isoLASER
+Author: Giovanni Quinones Valdez
+Author-email: giovas@ucla.edu
+Project-URL: Bug Tracker, https://github.com/gxiaolab/isoLASER/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: multiprocess
+Requires-Dist: numpy
+Requires-Dist: scipy==1.10.1
+Requires-Dist: pandas
+Requires-Dist: pysam
+Requires-Dist: pytabix
+Requires-Dist: pyfaidx
+Requires-Dist: biopython
+Requires-Dist: vcfpy
+Requires-Dist: HTSeq
+Requires-Dist: networkx
+Requires-Dist: scikit-learn
+
+<<<<<<< HEAD
+# TAllele_block
+
+alignment block level implementation of T-Allele
+=======
+# TAllele_block
+>>>>>>> 1dd12585e98e7f2d736565097cda71ead40b4442
