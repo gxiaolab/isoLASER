@@ -8,6 +8,7 @@
 isoLASER performs gene-level variant calls, phasing, and splicing linkage analysis using third-generation RNA sequencing data.
 
 ## **Table of contents**
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Preprocessing](#preprocessing)
   - [Transcript identification](#transcript-identification)
@@ -19,6 +20,31 @@ isoLASER performs gene-level variant calls, phasing, and splicing linkage analys
 - [Output](#output)
 - [Debug](#debug)
 
+
+## **Requirements**
+
+isoLASER is written in Python 3.8 and requires the following packages (with the tested versions):
+
+- multiprocess
+- numpy==1.24.4
+- scipy==1.10.1        
+- pandas==2.0.3
+- pysam==0.16.0.1
+- pytabix==0.1
+- pyfaidx==0.5.8
+- biopython==1.76
+- vcfpy==1.0.3
+- HTSeq==0.12.4
+- networkx==3.1
+- scikit-learn==1.3.2
+
+isoLASER has been tested in the following operating systems:
+- CentOS Linux 7
+
+External software requirements:
+- [GATK](https://gatk.broadinstitute.org/hc/en-us) 
+- [samtools](http://www.htslib.org/)
+- [minimap2](https://github.com/lh3/minimap2)
 
 ## **Installation**
 
@@ -35,6 +61,12 @@ git clone git@github.com:gxiaolab/isoLASER.git
 cd isoLASER
 python -m build
 pip install .
+```
+
+It is recommended to install isoLASER in a virtual environment.
+
+```
+conda create -n isoLASER_env python=3.8
 ```
 
 You can also download the **Singularity** container:

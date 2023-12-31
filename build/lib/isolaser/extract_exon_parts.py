@@ -3,7 +3,7 @@ import HTSeq
 import pysam
 import numpy as np
 import pandas as pd
-from optparse import OptionParser
+from optparse import OptionParser, OptionGroup
 from collections import defaultdict, Counter
 
 import sys
@@ -40,8 +40,7 @@ def get_transcript_structure(args):
     ### Genomic Arrays
     spl_coords = HTSeq.GenomicArrayOfSets(chroms = [CHROM], stranded = True)
    
-    
-    GTF_handle = pysam.TabixFile(options.gtf_file, parser = pysam.asGTF())
+    GTF_handle = pysam.TabixFile(GFF_FILE, parser = pysam.asGTF())
 
     for record in GTF_handle.fetch(CHROM, Gene_iv.start, Gene_iv.end):
         
@@ -83,7 +82,7 @@ def get_transcript_structure(args):
 
 
 
-if __name__ == '__main__':
+def main():
 
     description = """isoLASER - Extracting exon parts from a bam file"""
 
@@ -111,6 +110,9 @@ if __name__ == '__main__':
 
     ### multiprocessing pool 
 
+    global GFF_FILE 
+    GFF_FILE = options.gtf_file
+
 
     pool = multiprocessing.Pool(8) 
     pool_output = pool.imap_unordered(get_transcript_structure, GeneList)
@@ -131,3 +133,8 @@ if __name__ == '__main__':
         
 
     pool.terminate() 
+
+
+
+if __name__ == '__main__':
+    main()

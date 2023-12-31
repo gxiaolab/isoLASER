@@ -1,6 +1,8 @@
 [console_scripts]
 isolaser = isolaser.isolaser:main
 isolaser_annotate = isolaser.annotate_reads:main
+isolaser_combine_vcf = isolaser.combine_vcf:main
 isolaser_convert_gtf_to_fasta = isolaser.convert_gff_to_fasta:main
+isolaser_extract_exon_parts = isolaser.extract_exon_parts:main
 isolaser_filter = isolaser.isolaser_filter:main
 isolaser_joint = isolaser.isolaser_joint:main

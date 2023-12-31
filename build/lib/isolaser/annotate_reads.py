@@ -65,6 +65,7 @@ def main():
 			continue 
 
 		gene_name = record.attr["gene_id"] + '_' + record.attr["gene_name"]
+		gene_name = gene_name.replace('"', '')
 		g_counter += 1
 
 		if g_counter % 2500 == 0:
@@ -94,6 +95,7 @@ def main():
 			r_counter['annotated'] += 1
 
 			read.set_tag('ZG', gene_name)
+
 			if transcriptome_map[r_name]:
 				read.set_tag('ZT', transcriptome_map[r_name])
 			else:

@@ -95,21 +95,22 @@ def process_read_cluster(RC_info):
 	VAR_LIST_RC, hap_clusters = gqv_phaser.main(VAR_LIST_RC, RCG_reads_list, clf_dict, options)
 
 	t8 = time()
+
+	gene_pickle_file = f'{options.gff_file}/tx_structure.{GeneName}.pickle'
 	
 
 	if options.run_mode == "Training":
 		mi_outlines = []
-	elif not os.path.exists(f'{options.gff_file}/tx_structure.{GeneName}.pickle'):
+	elif not os.path.exists(gene_pickle_file):
 		mi_outlines = []
 	elif not hap_clusters:
 		mi_outlines = []
 	else:
-		tb = open(f'{options.gff_file}/tx_structure.{GeneName}.pickle', 'rb')
+		tb = open(gene_pickle_file, 'rb')
 		TX_structure = pickle.load(tb)
 
 		mi_outlines = gqv_gff_utils.mi_parse_variants(VAR_LIST_RC, RCG_reads, TX_structure, 
 														RC_info, hap_clusters, ami_polyfits, ami_normalfits)
-		
 		del TX_structure
 		tb.close()
 		
@@ -261,6 +262,8 @@ def main():
 
 	parser.add_option_group(advanced_options)
 
+	global options
+
 	(options, args) = parser.parse_args()
 
 	sys.setrecursionlimit(int(1e6))
@@ -279,6 +282,8 @@ def main():
 
 
 	PACKAGE_PATH = os.path.realpath(os.path.dirname(__file__))
+
+	global clf_dict, ami_polyfits, ami_normalfits
 
 	if options.platform == "PacBio":
 		with open(f"{PACKAGE_PATH}/glm/gm12878_sequel2.MERGED.feature_matrix.tab.proc_1.csv.f1.glm.pickle", 'rb') as fid:
