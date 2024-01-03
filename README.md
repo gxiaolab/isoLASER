@@ -45,6 +45,7 @@ External software requirements:
 - [GATK](https://gatk.broadinstitute.org/hc/en-us) 
 - [samtools](http://www.htslib.org/)
 - [minimap2](https://github.com/lh3/minimap2)
+- Tabix
 
 ## **Installation**
 
@@ -184,7 +185,7 @@ isoLASER_joint -f {fofn.tsv} -o {output.prefix} -t {transcript.db}
 Parse the `.mi_summary.tsv` file to obtain the list of events to plot
 
 ```
-isolaser_parse_mi_file --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {transcriptome.db} 
+nigiri_parse --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {transcriptome.db} 
 
 # output:
 {output.plot}.cis_events.bed
@@ -193,11 +194,11 @@ isolaser_parse_mi_file --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {
 Split the bam file
 
 ```
-isolaser_split_bam_by_allele -b {input.annot.bam} -v {var.string} -o {fofn} 
+nigiri_split -b {input.annot.bam} -v {var.string} -o {fofn} 
 ```
-Plot
+We use an adapted version of [ggsashimi](https://github.com/guigolab/ggsashimi)
 ```
-ggsashimi -b {fofn} -c {region} -o {output.plot} 
+nigiri_plot -b {fofn} -c {region} -o {output.plot} 
 ```
 
 <img src="nigiri.FAM221A.png" alt="FAM221A" width="600" heigth="600" class="center" />
