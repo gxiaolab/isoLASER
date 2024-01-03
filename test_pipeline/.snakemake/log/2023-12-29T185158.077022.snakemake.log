@@ -1,0 +1,92 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                count    min threads    max threads
+---------------  -------  -------------  -------------
+all                    1              1              1
+isolaser_filter        3              1              1
+isolaser_run           3              1              1
+total                  7              1              1
+
+Select jobs to execute...
+
+[Fri Dec 29 18:51:59 2023]
+rule isolaser_run:
+    input: bam/dlpfc_3.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    jobid: 14
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:51:59 2023]
+rule isolaser_run:
+    input: bam/dlpfc_1.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    jobid: 2
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:51:59 2023]
+rule isolaser_run:
+    input: bam/dlpfc_2.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    jobid: 9
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:52:16 2023]
+Error in rule isolaser_run:
+    jobid: 14
+    input: bam/dlpfc_3.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    shell:
+        
+        isolaser             -b bam/dlpfc_3.annotated.sorted.bam             -o out/isolaser.dlpfc_3             -t data/talon_observedOnly_db             -f data/hg38.fa &> log/isolaser.dlpfc_3.log
+
+        less out/isolaser.dlpfc_3.mi_summary.tab | sort -nk2 -k1,1V -k2,2n -k3,3n | bgzip -c -f > out/isolaser.dlpfc_3.mi_summary.tab.gz
+
+        tabix -f -p bed out/isolaser.dlpfc_3.mi_summary.tab.gz
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Fri Dec 29 18:52:16 2023]
+Error in rule isolaser_run:
+    jobid: 9
+    input: bam/dlpfc_2.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    shell:
+        
+        isolaser             -b bam/dlpfc_2.annotated.sorted.bam             -o out/isolaser.dlpfc_2             -t data/talon_observedOnly_db             -f data/hg38.fa &> log/isolaser.dlpfc_2.log
+
+        less out/isolaser.dlpfc_2.mi_summary.tab | sort -nk2 -k1,1V -k2,2n -k3,3n | bgzip -c -f > out/isolaser.dlpfc_2.mi_summary.tab.gz
+
+        tabix -f -p bed out/isolaser.dlpfc_2.mi_summary.tab.gz
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Fri Dec 29 18:52:16 2023]
+Error in rule isolaser_run:
+    jobid: 2
+    input: bam/dlpfc_1.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    shell:
+        
+        isolaser             -b bam/dlpfc_1.annotated.sorted.bam             -o out/isolaser.dlpfc_1             -t data/talon_observedOnly_db             -f data/hg38.fa &> log/isolaser.dlpfc_1.log
+
+        less out/isolaser.dlpfc_1.mi_summary.tab | sort -nk2 -k1,1V -k2,2n -k3,3n | bgzip -c -f > out/isolaser.dlpfc_1.mi_summary.tab.gz
+
+        tabix -f -p bed out/isolaser.dlpfc_1.mi_summary.tab.gz
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-12-29T185158.077022.snakemake.log

@@ -7,6 +7,7 @@ src/isolaser/annotate_reads.py
 src/isolaser/combine_vcf.py
 src/isolaser/convert_gff_to_fasta.py
 src/isolaser/extract_exon_parts.py
+src/isolaser/ggsashimi.py
 src/isolaser/gqv_bam_utils.py
 src/isolaser/gqv_dbg_utils.py
 src/isolaser/gqv_gff_utils.py
@@ -18,6 +19,8 @@ src/isolaser/gqv_vartool.py
 src/isolaser/isolaser.py
 src/isolaser/isolaser_filter.py
 src/isolaser/isolaser_joint.py
+src/isolaser/nigiri_parse_mi_file.py
+src/isolaser/split_bam_by_allele.py
 src/isolaser.egg-info/PKG-INFO
 src/isolaser.egg-info/SOURCES.txt
 src/isolaser.egg-info/dependency_links.txt
@@ -41,5 +44,4 @@ src/isolaser/glm/train.pacbio.SNP.glm.pickle
 src/isolaser/nigiri_pkg/__init__.py
 src/isolaser/nigiri_pkg/ggsashimi.py
 src/isolaser/nigiri_pkg/parse_joint_file.py
-src/isolaser/nigiri_pkg/parse_mi_file.py
 src/isolaser/nigiri_pkg/split_bam_by_allele.py

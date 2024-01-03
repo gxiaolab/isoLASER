@@ -1,0 +1,131 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                    count    min threads    max threads
+-------------------  -------  -------------  -------------
+all                        1              1              1
+isolaser_annotate          3              1              1
+isolaser_filter            3              1              1
+isolaser_run               3              1              1
+isolaser_sort_index        3              1              1
+preprocess                 3              1              1
+total                     16              1              1
+
+Select jobs to execute...
+
+[Fri Dec 29 18:29:39 2023]
+rule preprocess:
+    input: bam/dlpfc_1.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_1.fq, bam/dlpfc_1.transcriptome.sam
+    jobid: 5
+    reason: Missing output files: bam/dlpfc_1.transcriptome.sam
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:29:39 2023]
+rule preprocess:
+    input: bam/dlpfc_2.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_2.fq, bam/dlpfc_2.transcriptome.sam
+    jobid: 12
+    reason: Missing output files: bam/dlpfc_2.transcriptome.sam
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:29:39 2023]
+rule preprocess:
+    input: bam/dlpfc_3.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_3.fq, bam/dlpfc_3.transcriptome.sam
+    jobid: 17
+    reason: Missing output files: bam/dlpfc_3.transcriptome.sam
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:29:51 2023]
+Finished job 17.
+1 of 16 steps (6%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:29:51 2023]
+rule isolaser_annotate:
+    input: bam/dlpfc_3.bam, bam/dlpfc_3.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_3.annotated.bam
+    jobid: 16
+    reason: Missing output files: bam/dlpfc_3.annotated.bam; Input files updated by another job: bam/dlpfc_3.transcriptome.sam
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:29:51 2023]
+Finished job 5.
+2 of 16 steps (12%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:29:51 2023]
+rule isolaser_annotate:
+    input: bam/dlpfc_1.bam, bam/dlpfc_1.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_1.annotated.bam
+    jobid: 4
+    reason: Missing output files: bam/dlpfc_1.annotated.bam; Input files updated by another job: bam/dlpfc_1.transcriptome.sam
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:29:52 2023]
+Finished job 12.
+3 of 16 steps (19%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:29:52 2023]
+rule isolaser_annotate:
+    input: bam/dlpfc_2.bam, bam/dlpfc_2.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_2.annotated.bam
+    jobid: 11
+    reason: Missing output files: bam/dlpfc_2.annotated.bam; Input files updated by another job: bam/dlpfc_2.transcriptome.sam
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:29:58 2023]
+[Fri Dec 29 18:29:58 2023]
+Error in rule isolaser_annotate:
+    jobid: 16
+    input: bam/dlpfc_3.bam, bam/dlpfc_3.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_3.annotated.bam
+    shell:
+        
+        isolaser_annotate             -b bam/dlpfc_3.bam             -t bam/dlpfc_3.transcriptome.sam             -g data/talon_observedOnly.chr21.sorted.gz             -o bam/dlpfc_3.annotated.bam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Error in rule isolaser_annotate:
+    jobid: 11
+    input: bam/dlpfc_2.bam, bam/dlpfc_2.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_2.annotated.bam
+    shell:
+        
+        isolaser_annotate             -b bam/dlpfc_2.bam             -t bam/dlpfc_2.transcriptome.sam             -g data/talon_observedOnly.chr21.sorted.gz             -o bam/dlpfc_2.annotated.bam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job isolaser_annotate since they might be corrupted:
+bam/dlpfc_3.annotated.bam
+Removing output files of failed job isolaser_annotate since they might be corrupted:
+bam/dlpfc_2.annotated.bam
+[Fri Dec 29 18:29:58 2023]
+Error in rule isolaser_annotate:
+    jobid: 4
+    input: bam/dlpfc_1.bam, bam/dlpfc_1.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_1.annotated.bam
+    shell:
+        
+        isolaser_annotate             -b bam/dlpfc_1.bam             -t bam/dlpfc_1.transcriptome.sam             -g data/talon_observedOnly.chr21.sorted.gz             -o bam/dlpfc_1.annotated.bam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job isolaser_annotate since they might be corrupted:
+bam/dlpfc_1.annotated.bam
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-12-29T182936.705628.snakemake.log

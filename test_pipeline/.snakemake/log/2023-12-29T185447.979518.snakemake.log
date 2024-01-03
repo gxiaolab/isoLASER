@@ -1,0 +1,108 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                count    min threads    max threads
+---------------  -------  -------------  -------------
+all                    1              1              1
+isolaser_filter        3              1              1
+isolaser_run           3              1              1
+total                  7              1              1
+
+Select jobs to execute...
+
+[Fri Dec 29 18:54:50 2023]
+rule isolaser_run:
+    input: bam/dlpfc_3.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    jobid: 14
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:54:50 2023]
+rule isolaser_run:
+    input: bam/dlpfc_1.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    jobid: 2
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:54:50 2023]
+rule isolaser_run:
+    input: bam/dlpfc_2.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    jobid: 9
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:57:00 2023]
+Finished job 14.
+1 of 7 steps (14%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:57:00 2023]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_3.mi_summary.filtered.tab
+    jobid: 13
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:57:01 2023]
+Finished job 13.
+2 of 7 steps (29%) done
+[Fri Dec 29 18:57:15 2023]
+Finished job 9.
+3 of 7 steps (43%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:57:15 2023]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_2.mi_summary.filtered.tab
+    jobid: 8
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:57:16 2023]
+Finished job 2.
+4 of 7 steps (57%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:57:16 2023]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_1.mi_summary.filtered.tab
+    jobid: 1
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:57:16 2023]
+Finished job 8.
+5 of 7 steps (71%) done
+[Fri Dec 29 18:57:16 2023]
+Finished job 1.
+6 of 7 steps (86%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:57:16 2023]
+localrule all:
+    input: out/isolaser.dlpfc_1.mi_summary.filtered.tab, out/isolaser.dlpfc_2.mi_summary.filtered.tab, out/isolaser.dlpfc_3.mi_summary.filtered.tab
+    jobid: 0
+    reason: Input files updated by another job: out/isolaser.dlpfc_3.mi_summary.filtered.tab, out/isolaser.dlpfc_1.mi_summary.filtered.tab, out/isolaser.dlpfc_2.mi_summary.filtered.tab
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:57:16 2023]
+Finished job 0.
+7 of 7 steps (100%) done
+Complete log: .snakemake/log/2023-12-29T185447.979518.snakemake.log

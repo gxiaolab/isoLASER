@@ -1,0 +1,51 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count    min threads    max threads
+--------------------  -------  -------------  -------------
+all                         1              1              1
+isolaser_combine_vcf        1              1              1
+isolaser_joint              1              1              1
+total                       3              1              1
+
+Select jobs to execute...
+
+[Tue Jan  2 12:40:52 2024]
+rule isolaser_combine_vcf:
+    input: out/fofn.txt, data/hg38.fa
+    output: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz
+    jobid: 20
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:41:05 2024]
+Finished job 20.
+1 of 3 steps (33%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:41:05 2024]
+rule isolaser_joint:
+    input: out/fofn.txt, out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, data/talon_observedOnly_db/GeneList.tsv
+    output: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    jobid: 18
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.mi_summary.tab; Input files updated by another job: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz; Set of input files has changed since last execution; Code has changed since last execution; Params have changed since last execution
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:41:22 2024]
+Finished job 18.
+2 of 3 steps (67%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:41:22 2024]
+localrule all:
+    input: out/isolaser.dlpfc_1.mi_summary.filtered.tab, out/isolaser.dlpfc_2.mi_summary.filtered.tab, out/isolaser.dlpfc_3.mi_summary.filtered.tab, out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    jobid: 0
+    reason: Input files updated by another job: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:41:22 2024]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: .snakemake/log/2024-01-02T124044.503688.snakemake.log

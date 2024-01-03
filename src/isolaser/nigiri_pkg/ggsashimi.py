@@ -16,68 +16,6 @@ def get_version():
         return version
 
 
-def define_options():
-        parser = ArgumentParser(description='Create sashimi plot for a given genomic region')
-        
-        parser.add_argument("-b", "--bam", type=str, required=True,
-                help="""
-                Individual bam file or file with a list of bam files.
-                In the case of a list of files the format is tsv:
-                1col: IDX for bam file,
-                2col: path of bam file,
-                3+col: additional columns
-                """)
-        parser.add_argument("-c", "--coordinates", type=str, required=True,
-                help="Genomic region. Format: chr:start-end. Remember that bam coordinates are 0-based")
-        parser.add_argument("-o", "--out-prefix", type=str, dest="out_prefix", default="sashimi",
-                help="Prefix for plot file name [default=%(default)s]")
-        parser.add_argument("-S", "--out-strand", type=str, dest="out_strand", default="both",
-                help="Only for --strand other than 'NONE'. Choose which signal strand to plot: <both> <plus> <minus> [default=%(default)s]")
-        parser.add_argument("-M", "--min-coverage", type=int, default=1, dest="min_coverage",
-                help="Minimum number of reads supporting a junction to be drawn [default=1]")
-        parser.add_argument( "--min-junction-ratio", type=float, default=0.05, dest="min_fraction",
-                help="Minimum number of reads supporting a junction to be drawn [default=0.05]")
-        parser.add_argument("-j", "--junctions-bed", type=str, dest = "junctions_bed", default="",
-                help="Junction BED file name [default=no junction file]")
-        parser.add_argument("-g", "--gtf",
-                help="Gtf file with annotation (only exons is enough)")
-        parser.add_argument("--mi", dest = "mi",
-                help="MI summary file")
-        parser.add_argument("-s", "--strand", default="NONE", type=str,
-                help="Strand specificity: <NONE> <SENSE> <ANTISENSE> <MATE1_SENSE> <MATE2_SENSE> [default=%(default)s]")
-        parser.add_argument("--shrink", action="store_true",
-                help="Shrink the junctions by a factor for nicer display [default=%(default)s]")
-        parser.add_argument("-O", "--overlay", type=int,
-                help="Index of column with overlay levels (1-based)")
-        parser.add_argument("-A", "--aggr", type=str, default="",
-                help="""Aggregate function for overlay: <mean> <median> <mean_j> <median_j>.
-                        Use mean_j | median_j to keep density overlay but aggregate junction counts [default=no aggregation]""")
-        parser.add_argument("-C", "--color-factor", type=int, dest="color_factor",
-                help="Index of column with color levels (1-based)")
-        parser.add_argument("--alpha", type=float, default=1.0,
-                help="Transparency level for density histogram [default=%(default)s]")
-        parser.add_argument("-P", "--palette", type=str,
-                help="Color palette file. tsv file with >=1 columns, where the color is the first column. Both R color names and hexadecimal values are valid")
-        parser.add_argument("-L", "--labels", type=int, dest="labels", default=1,
-                help="Index of column with labels (1-based) [default=%(default)s]")
-        parser.add_argument("--fix-y-scale", default=False, action="store_true", dest = "fix_y_scale",
-                help="Fix y-scale across individual signal plots [default=%(default)s]")
-        parser.add_argument("--height", type=float, default=2,
-                help="Height of the individual signal plot in inches [default=%(default)s]")
-        parser.add_argument("--ann-height", type=float, default=2.5, dest="ann_height",
-                help="Height of annotation plot in inches [default=%(default)s]")
-        parser.add_argument("--width", type=float, default=10,
-                help="Width of the plot in inches [default=%(default)s]")
-        parser.add_argument("--base-size", type=float, default=14, dest="base_size",
-                help="Base font size of the plot in pch [default=%(default)s]")
-        parser.add_argument("-F", "--out-format", type=str, default="pdf", dest="out_format",
-                help="Output file format: <pdf> <svg> <png> <jpeg> <tiff> [default=%(default)s]")
-        parser.add_argument("-R", "--out-resolution", type=int, default=300, dest="out_resolution",
-                help="Output file resolution in PPI (pixels per inch). Applies only to raster output formats [default=%(default)s]")
-        parser.add_argument('--version', action='version', version=get_version())
-        return parser
-
-
 
 def parse_coordinates(c):
         c = c.replace(",", "")
@@ -656,14 +594,70 @@ def get_debug_info():
         print(r_info.strip().decode('utf-8'))
 
 
-if __name__ == "__main__":
+def main():
 
         strand_dict = {"plus": "+", "minus": "-"}
 
-        parser = define_options()
-        if len(sys.argv)==1:
-            parser.print_help()
-            sys.exit(1)
+        parser = ArgumentParser(description='Create sashimi plot for a given genomic region')
+        
+        parser.add_argument("-b", "--bam", type=str, required=True,
+                help="""
+                Individual bam file or file with a list of bam files.
+                In the case of a list of files the format is tsv:
+                1col: IDX for bam file,
+                2col: path of bam file,
+                3+col: additional columns
+                """)
+        parser.add_argument("-c", "--coordinates", type=str, required=True,
+                help="Genomic region. Format: chr:start-end. Remember that bam coordinates are 0-based")
+        parser.add_argument("-o", "--out-prefix", type=str, dest="out_prefix", default="sashimi",
+                help="Prefix for plot file name [default=%(default)s]")
+        parser.add_argument("-S", "--out-strand", type=str, dest="out_strand", default="both",
+                help="Only for --strand other than 'NONE'. Choose which signal strand to plot: <both> <plus> <minus> [default=%(default)s]")
+        parser.add_argument("-M", "--min-coverage", type=int, default=1, dest="min_coverage",
+                help="Minimum number of reads supporting a junction to be drawn [default=1]")
+        parser.add_argument( "--min-junction-ratio", type=float, default=0.05, dest="min_fraction",
+                help="Minimum number of reads supporting a junction to be drawn [default=0.05]")
+        parser.add_argument("-j", "--junctions-bed", type=str, dest = "junctions_bed", default="",
+                help="Junction BED file name [default=no junction file]")
+        parser.add_argument("-g", "--gtf",
+                help="Gtf file with annotation (only exons is enough)")
+        parser.add_argument("--mi", dest = "mi",
+                help="MI summary file")
+        parser.add_argument("-s", "--strand", default="NONE", type=str,
+                help="Strand specificity: <NONE> <SENSE> <ANTISENSE> <MATE1_SENSE> <MATE2_SENSE> [default=%(default)s]")
+        parser.add_argument("--shrink", action="store_true",
+                help="Shrink the junctions by a factor for nicer display [default=%(default)s]")
+        parser.add_argument("-O", "--overlay", type=int,
+                help="Index of column with overlay levels (1-based)")
+        parser.add_argument("-A", "--aggr", type=str, default="",
+                help="""Aggregate function for overlay: <mean> <median> <mean_j> <median_j>.
+                        Use mean_j | median_j to keep density overlay but aggregate junction counts [default=no aggregation]""")
+        parser.add_argument("-C", "--color-factor", type=int, dest="color_factor",
+                help="Index of column with color levels (1-based)")
+        parser.add_argument("--alpha", type=float, default=1.0,
+                help="Transparency level for density histogram [default=%(default)s]")
+        parser.add_argument("-P", "--palette", type=str,
+                help="Color palette file. tsv file with >=1 columns, where the color is the first column. Both R color names and hexadecimal values are valid")
+        parser.add_argument("-L", "--labels", type=int, dest="labels", default=1,
+                help="Index of column with labels (1-based) [default=%(default)s]")
+        parser.add_argument("--fix-y-scale", default=False, action="store_true", dest = "fix_y_scale",
+                help="Fix y-scale across individual signal plots [default=%(default)s]")
+        parser.add_argument("--height", type=float, default=2,
+                help="Height of the individual signal plot in inches [default=%(default)s]")
+        parser.add_argument("--ann-height", type=float, default=2.5, dest="ann_height",
+                help="Height of annotation plot in inches [default=%(default)s]")
+        parser.add_argument("--width", type=float, default=10,
+                help="Width of the plot in inches [default=%(default)s]")
+        parser.add_argument("--base-size", type=float, default=14, dest="base_size",
+                help="Base font size of the plot in pch [default=%(default)s]")
+        parser.add_argument("-F", "--out-format", type=str, default="pdf", dest="out_format",
+                help="Output file format: <pdf> <svg> <png> <jpeg> <tiff> [default=%(default)s]")
+        parser.add_argument("-R", "--out-resolution", type=int, default=300, dest="out_resolution",
+                help="Output file resolution in PPI (pixels per inch). Applies only to raster output formats [default=%(default)s]")
+        parser.add_argument('--version', action='version', version=get_version())
+
+        global args
 
         args = parser.parse_args()
 
@@ -1073,3 +1067,9 @@ if __name__ == "__main__":
                 else:
                         plot(R_script)
         exit()
+
+
+
+
+if __name__ == "__main__":
+        main()

@@ -1,0 +1,36 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job               count    min threads    max threads
+--------------  -------  -------------  -------------
+all                   1              1              1
+isolaser_joint        1              1              1
+total                 2              1              1
+
+Select jobs to execute...
+
+[Sat Dec 30 16:22:08 2023]
+rule isolaser_joint:
+    input: out/fofn.txt, out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, data/talon_observedOnly_db
+    output: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    jobid: 18
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    resources: tmpdir=/tmp
+
+[Sat Dec 30 16:22:17 2023]
+Error in rule isolaser_joint:
+    jobid: 18
+    input: out/fofn.txt, out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, data/talon_observedOnly_db
+    output: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    shell:
+         
+        isolaser_joint             -i out/fofn.txt             -t data/talon_observedOnly_db             -v out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz             -o out/isolaser_joint.dlpfc 
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-12-30T162200.588679.snakemake.log

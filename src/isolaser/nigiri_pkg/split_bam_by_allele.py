@@ -9,7 +9,8 @@ import optparse
 from collections import Counter, defaultdict
 import subprocess 
 from scipy.stats import chisquare, norm, chi2_contingency
-from gqv_bam_utils import filter_reads, process_CIGAR
+
+from . import gqv_bam_utils 
 
 
 def process_hla_sam(hla_sam):
@@ -27,7 +28,7 @@ def process_hla_sam(hla_sam):
 	return d 
 
 
-if __name__ == "__main__":
+def main():
 
 	logging.basicConfig(level = logging.INFO)
 
@@ -100,7 +101,7 @@ if __name__ == "__main__":
 					hla_contig = 'allele'
 
 				if base == REF:
-					is_bad, lab = filter_reads(r.alignment)
+					is_bad, lab = gqv_bam_utils.filter_reads(r.alignment)
 					read_counter[('ref', lab)] += 1
 					if not is_bad:
 						tx_allele_counter[REF][tx_id] += 1
@@ -161,3 +162,7 @@ if __name__ == "__main__":
 
 	logging.info(f"all done")
 
+
+
+if __name__ == "__main__":
+	main() 

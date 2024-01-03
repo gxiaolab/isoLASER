@@ -879,9 +879,15 @@ def write_vcf_file(var_list, search_regions, genome_fasta, VCF_file, sample_name
                 
         ## ALT alleles
 
-        var_list_subset = [(REF, ALT, END) for (REF, ALT, END) in var_list[genomic_pos] if ALT]
-        ALTs = [ALT + LONG_REF[len(REF): ] for (REF, ALT, END) in var_list_subset] + ['<NON_REF>']
-        ALTs = ','.join(ALTs)
+        ALTs = []
+        for (REF, ALT, END) in var_list[genomic_pos]:
+            if ALT == "" and LONG_REF[len(REF): ] == "": 
+                ALT = '.'
+            else:
+                ALT = ALT + LONG_REF[len(REF): ]
+            ALTs.append(ALT)
+
+        ALTs = ','.join(ALTs + ['<NON_REF>']) 
 
      
 
@@ -920,7 +926,9 @@ def write_vcf_file(var_list, search_regions, genome_fasta, VCF_file, sample_name
             if len(LONG_REF) == len(alt) and len(LONG_REF) > 1:
                 var_is_mnp = True
 
-        if var_is_mnp:
+        multi_allelic = len(ALTs.split(',')) > 2
+
+        if var_is_mnp or multi_allelic:
             print('skipping', POS, LONG_REF, ALTs)
             continue
 

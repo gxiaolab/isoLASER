@@ -1,0 +1,148 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count    min threads    max threads
+--------------------  -------  -------------  -------------
+all                         1              1              1
+isolaser_combine_vcf        1              1              1
+isolaser_filter             3              1              1
+isolaser_joint              1              1              1
+isolaser_run                3              1              1
+write_fofn                  1              1              1
+total                      10              1              1
+
+Select jobs to execute...
+
+[Tue Jan  2 14:04:26 2024]
+rule isolaser_run:
+    input: bam/dlpfc_3.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    jobid: 14
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 14:04:26 2024]
+rule isolaser_run:
+    input: bam/dlpfc_1.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    jobid: 2
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 14:04:26 2024]
+rule isolaser_run:
+    input: bam/dlpfc_2.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    jobid: 9
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:05:59 2024]
+Finished job 14.
+1 of 10 steps (10%) done
+Select jobs to execute...
+
+[Tue Jan  2 14:05:59 2024]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_3.mi_summary.filtered.tab
+    jobid: 13
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:06:00 2024]
+Finished job 13.
+2 of 10 steps (20%) done
+[Tue Jan  2 14:06:12 2024]
+Finished job 9.
+3 of 10 steps (30%) done
+Select jobs to execute...
+
+[Tue Jan  2 14:06:12 2024]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_2.mi_summary.filtered.tab
+    jobid: 8
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:06:12 2024]
+Finished job 2.
+4 of 10 steps (40%) done
+Select jobs to execute...
+
+[Tue Jan  2 14:06:12 2024]
+rule write_fofn:
+    input: out/isolaser.dlpfc_1.mi_summary.tab.gz, out/isolaser.dlpfc_2.mi_summary.tab.gz, out/isolaser.dlpfc_3.mi_summary.tab.gz
+    output: out/fofn.txt
+    jobid: 19
+    reason: Missing output files: out/fofn.txt; Input files updated by another job: out/isolaser.dlpfc_2.mi_summary.tab.gz, out/isolaser.dlpfc_1.mi_summary.tab.gz, out/isolaser.dlpfc_3.mi_summary.tab.gz
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 14:06:12 2024]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_1.mi_summary.filtered.tab
+    jobid: 1
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:06:12 2024]
+Finished job 19.
+5 of 10 steps (50%) done
+Select jobs to execute...
+
+[Tue Jan  2 14:06:12 2024]
+rule isolaser_combine_vcf:
+    input: out/fofn.txt, data/hg38.fa
+    output: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz
+    jobid: 20
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz; Input files updated by another job: out/fofn.txt
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:06:12 2024]
+Finished job 8.
+6 of 10 steps (60%) done
+[Tue Jan  2 14:06:13 2024]
+Finished job 1.
+7 of 10 steps (70%) done
+[Tue Jan  2 14:06:23 2024]
+Finished job 20.
+8 of 10 steps (80%) done
+Select jobs to execute...
+
+[Tue Jan  2 14:06:23 2024]
+rule isolaser_joint:
+    input: out/fofn.txt, out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, data/talon_observedOnly_db/GeneList.tsv
+    output: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    jobid: 18
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.mi_summary.tab; Input files updated by another job: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, out/fofn.txt
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:06:31 2024]
+Finished job 18.
+9 of 10 steps (90%) done
+Select jobs to execute...
+
+[Tue Jan  2 14:06:31 2024]
+localrule all:
+    input: out/isolaser.dlpfc_1.mi_summary.filtered.tab, out/isolaser.dlpfc_2.mi_summary.filtered.tab, out/isolaser.dlpfc_3.mi_summary.filtered.tab, out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    jobid: 0
+    reason: Input files updated by another job: out/isolaser.dlpfc_1.mi_summary.filtered.tab, out/isolaser.dlpfc_2.mi_summary.filtered.tab, out/isolaser.dlpfc_3.mi_summary.filtered.tab, out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 14:06:31 2024]
+Finished job 0.
+10 of 10 steps (100%) done
+Complete log: .snakemake/log/2024-01-02T140423.439056.snakemake.log

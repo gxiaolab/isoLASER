@@ -1,0 +1,55 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count    min threads    max threads
+--------------------  -------  -------------  -------------
+all                         1              1              1
+isolaser_combine_vcf        1              1              1
+isolaser_joint              1              1              1
+write_fofn                  1              1              1
+total                       4              1              1
+
+Select jobs to execute...
+
+[Tue Jan  2 11:58:03 2024]
+rule write_fofn:
+    output: out/fofn.txt
+    jobid: 19
+    reason: Missing output files: out/fofn.txt; Code has changed since last execution
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 11:58:03 2024]
+Finished job 19.
+1 of 4 steps (25%) done
+Select jobs to execute...
+
+[Tue Jan  2 11:58:03 2024]
+rule isolaser_combine_vcf:
+    input: out/fofn.txt, data/hg38.fa
+    output: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz
+    jobid: 20
+    reason: Input files updated by another job: out/fofn.txt
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 11:58:17 2024]
+Finished job 20.
+2 of 4 steps (50%) done
+Select jobs to execute...
+
+[Tue Jan  2 11:58:17 2024]
+rule isolaser_joint:
+    input: out/fofn.txt, out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, data/talon_observedOnly_db
+    output: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    jobid: 18
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.mi_summary.tab; Input files updated by another job: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz, out/fofn.txt
+    resources: tmpdir=/tmp
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in rule isolaser_joint in file /u/project/gxxiao4/giovas/projects/TAllele/test/out_test/isolaser_test.smk, line 165:
+Job 18  completed successfully, but some output files are missing. Missing files after 5 seconds. This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait:
+out/isolaser_joint.dlpfc.merged.mi_summary.tab
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2024-01-02T115759.831697.snakemake.log

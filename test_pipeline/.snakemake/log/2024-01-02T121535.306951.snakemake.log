@@ -1,0 +1,288 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count    min threads    max threads
+--------------------  -------  -------------  -------------
+all                         1              1              1
+annotate_reads              3              1              1
+bam_sort_index              3              1              1
+convert_gff_to_fasta        1              1              1
+extract_exonic_parts        1              1              1
+isolaser_combine_vcf        1              1              1
+isolaser_filter             3              1              1
+isolaser_joint              1              1              1
+isolaser_run                3              1              1
+map_to_transcriptome        3              1              1
+write_fofn                  1              1              1
+total                      21              1              1
+
+Select jobs to execute...
+
+[Tue Jan  2 12:15:37 2024]
+rule convert_gff_to_fasta:
+    input: data/talon_observedOnly.chr21.sorted.gz, data/hg38.fa
+    output: data/talon_observedOnly.sorted.fa
+    jobid: 6
+    reason: Missing output files: data/talon_observedOnly.sorted.fa
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 12:15:37 2024]
+rule extract_exonic_parts:
+    input: data/talon_observedOnly.chr21.sorted.gz
+    output: data/talon_observedOnly_db/GeneList.tsv
+    jobid: 7
+    reason: Missing output files: data/talon_observedOnly_db/GeneList.tsv
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:15:47 2024]
+Finished job 7.
+1 of 21 steps (5%) done
+[Tue Jan  2 12:15:48 2024]
+Finished job 6.
+2 of 21 steps (10%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:15:48 2024]
+rule map_to_transcriptome:
+    input: bam/dlpfc_1.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_1.fq, bam/dlpfc_1.transcriptome.sam
+    jobid: 5
+    reason: Missing output files: bam/dlpfc_1.transcriptome.sam; Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 12:15:48 2024]
+rule map_to_transcriptome:
+    input: bam/dlpfc_2.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_2.fq, bam/dlpfc_2.transcriptome.sam
+    jobid: 12
+    reason: Missing output files: bam/dlpfc_2.transcriptome.sam; Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 12:15:48 2024]
+rule map_to_transcriptome:
+    input: bam/dlpfc_3.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_3.fq, bam/dlpfc_3.transcriptome.sam
+    jobid: 17
+    reason: Missing output files: bam/dlpfc_3.transcriptome.sam; Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:06 2024]
+Finished job 17.
+3 of 21 steps (14%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:06 2024]
+rule annotate_reads:
+    input: bam/dlpfc_3.bam, bam/dlpfc_3.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_3.annotated.bam
+    jobid: 16
+    reason: Missing output files: bam/dlpfc_3.annotated.bam; Input files updated by another job: bam/dlpfc_3.transcriptome.sam
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:08 2024]
+Finished job 5.
+4 of 21 steps (19%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:08 2024]
+rule annotate_reads:
+    input: bam/dlpfc_1.bam, bam/dlpfc_1.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_1.annotated.bam
+    jobid: 4
+    reason: Missing output files: bam/dlpfc_1.annotated.bam; Input files updated by another job: bam/dlpfc_1.transcriptome.sam
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:08 2024]
+Finished job 12.
+5 of 21 steps (24%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:08 2024]
+rule annotate_reads:
+    input: bam/dlpfc_2.bam, bam/dlpfc_2.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_2.annotated.bam
+    jobid: 11
+    reason: Missing output files: bam/dlpfc_2.annotated.bam; Input files updated by another job: bam/dlpfc_2.transcriptome.sam
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:09 2024]
+Finished job 16.
+6 of 21 steps (29%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:09 2024]
+rule bam_sort_index:
+    input: bam/dlpfc_3.annotated.bam
+    output: bam/dlpfc_3.annotated.sorted.bam
+    jobid: 15
+    reason: Missing output files: bam/dlpfc_3.annotated.sorted.bam; Input files updated by another job: bam/dlpfc_3.annotated.bam
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:10 2024]
+Finished job 15.
+7 of 21 steps (33%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:10 2024]
+rule isolaser_run:
+    input: bam/dlpfc_3.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    jobid: 14
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.tab.gz; Input files updated by another job: data/talon_observedOnly_db/GeneList.tsv, bam/dlpfc_3.annotated.sorted.bam
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:11 2024]
+Finished job 4.
+8 of 21 steps (38%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:11 2024]
+rule bam_sort_index:
+    input: bam/dlpfc_1.annotated.bam
+    output: bam/dlpfc_1.annotated.sorted.bam
+    jobid: 3
+    reason: Missing output files: bam/dlpfc_1.annotated.sorted.bam; Input files updated by another job: bam/dlpfc_1.annotated.bam
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:11 2024]
+Finished job 11.
+9 of 21 steps (43%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:11 2024]
+rule bam_sort_index:
+    input: bam/dlpfc_2.annotated.bam
+    output: bam/dlpfc_2.annotated.sorted.bam
+    jobid: 10
+    reason: Missing output files: bam/dlpfc_2.annotated.sorted.bam; Input files updated by another job: bam/dlpfc_2.annotated.bam
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:12 2024]
+Finished job 3.
+10 of 21 steps (48%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:12 2024]
+rule isolaser_run:
+    input: bam/dlpfc_1.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    jobid: 2
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.tab.gz; Input files updated by another job: data/talon_observedOnly_db/GeneList.tsv, bam/dlpfc_1.annotated.sorted.bam
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:16:12 2024]
+Finished job 10.
+11 of 21 steps (52%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:16:12 2024]
+rule isolaser_run:
+    input: bam/dlpfc_2.annotated.sorted.bam, data/talon_observedOnly_db/GeneList.tsv, data/hg38.fa
+    output: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    jobid: 9
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.tab.gz; Input files updated by another job: data/talon_observedOnly_db/GeneList.tsv, bam/dlpfc_2.annotated.sorted.bam
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:17:50 2024]
+Finished job 14.
+12 of 21 steps (57%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:17:50 2024]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_3.mi_summary.filtered.tab
+    jobid: 13
+    reason: Missing output files: out/isolaser.dlpfc_3.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_3.mi_summary.tab.gz
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:17:52 2024]
+Finished job 13.
+13 of 21 steps (62%) done
+[Tue Jan  2 12:17:59 2024]
+Finished job 2.
+14 of 21 steps (67%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:17:59 2024]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_1.mi_summary.filtered.tab
+    jobid: 1
+    reason: Missing output files: out/isolaser.dlpfc_1.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_1.mi_summary.tab.gz
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:17:59 2024]
+Finished job 1.
+15 of 21 steps (71%) done
+[Tue Jan  2 12:18:00 2024]
+Finished job 9.
+16 of 21 steps (76%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:18:00 2024]
+rule write_fofn:
+    input: out/isolaser.dlpfc_1.mi_summary.tab.gz, out/isolaser.dlpfc_2.mi_summary.tab.gz, out/isolaser.dlpfc_3.mi_summary.tab.gz
+    output: out/fofn.txt
+    jobid: 19
+    reason: Missing output files: out/fofn.txt; Input files updated by another job: out/isolaser.dlpfc_2.mi_summary.tab.gz, out/isolaser.dlpfc_1.mi_summary.tab.gz, out/isolaser.dlpfc_3.mi_summary.tab.gz; Set of input files has changed since last execution
+    resources: tmpdir=/tmp
+
+
+[Tue Jan  2 12:18:00 2024]
+rule isolaser_filter:
+    input: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    output: out/isolaser.dlpfc_2.mi_summary.filtered.tab
+    jobid: 8
+    reason: Missing output files: out/isolaser.dlpfc_2.mi_summary.filtered.tab; Input files updated by another job: out/isolaser.dlpfc_2.mi_summary.tab.gz
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:18:00 2024]
+Finished job 19.
+17 of 21 steps (81%) done
+Select jobs to execute...
+
+[Tue Jan  2 12:18:00 2024]
+rule isolaser_combine_vcf:
+    input: out/fofn.txt, data/hg38.fa
+    output: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz
+    jobid: 20
+    reason: Missing output files: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz; Input files updated by another job: out/fofn.txt
+    resources: tmpdir=/tmp
+
+[Tue Jan  2 12:18:00 2024]
+Finished job 8.
+18 of 21 steps (86%) done
+[Tue Jan  2 12:18:07 2024]
+Error in rule isolaser_combine_vcf:
+    jobid: 20
+    input: out/fofn.txt, data/hg38.fa
+    output: out/isolaser_joint.dlpfc.merged.genotyped.gvcf.gz
+    shell:
+         
+        isolaser_combine_vcf             -i out/fofn.txt             -f data/hg38.fa             -o out/isolaser_joint.dlpfc         
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2024-01-02T121535.306951.snakemake.log

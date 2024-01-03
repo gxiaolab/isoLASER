@@ -1,0 +1,7 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+MissingInputException in rule isolaser_joint in file /u/project/gxxiao4/giovas/projects/TAllele/test/out_test/isolaser_test.smk, line 161:
+Missing input files for rule isolaser_joint:
+    output: out/isolaser.dlpfc.merged.mi_summary.tab
+    affected files:
+        out/isolaser.dlpfc.merged.genotyped.gvcf.gz

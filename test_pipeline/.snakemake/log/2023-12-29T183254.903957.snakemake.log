@@ -1,0 +1,94 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count    min threads    max threads
+--------------------  -------  -------------  -------------
+all                         1              1              1
+annotate_reads              3              1              1
+bam_sort_index              3              1              1
+convert_gff_to_fasta        1              1              1
+extract_exonic_parts        1              1              1
+isolaser_filter             3              1              1
+isolaser_run                3              1              1
+map_to_transcriptome        3              1              1
+total                      18              1              1
+
+Select jobs to execute...
+
+[Fri Dec 29 18:32:57 2023]
+rule convert_gff_to_fasta:
+    input: data/talon_observedOnly.chr21.sorted.gz, data/hg38.fa
+    output: data/talon_observedOnly.sorted.fa
+    jobid: 6
+    reason: Missing output files: data/talon_observedOnly.sorted.fa
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:33:11 2023]
+Finished job 6.
+1 of 18 steps (6%) done
+Select jobs to execute...
+
+[Fri Dec 29 18:33:11 2023]
+rule map_to_transcriptome:
+    input: bam/dlpfc_1.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_1.fq, bam/dlpfc_1.transcriptome.sam
+    jobid: 5
+    reason: Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:33:11 2023]
+rule map_to_transcriptome:
+    input: bam/dlpfc_2.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_2.fq, bam/dlpfc_2.transcriptome.sam
+    jobid: 12
+    reason: Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:33:11 2023]
+rule extract_exonic_parts:
+    input: data/talon_observedOnly.sorted.fa
+    output: data/talon_observedOnly_db/GeneList.tsv
+    jobid: 7
+    reason: Missing output files: data/talon_observedOnly_db/GeneList.tsv; Input files updated by another job: data/talon_observedOnly.sorted.fa
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:33:11 2023]
+rule map_to_transcriptome:
+    input: bam/dlpfc_3.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_3.fq, bam/dlpfc_3.transcriptome.sam
+    jobid: 17
+    reason: Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:33:13 2023]
+Error in rule extract_exonic_parts:
+    jobid: 7
+    input: data/talon_observedOnly.sorted.fa
+    output: data/talon_observedOnly_db/GeneList.tsv
+    shell:
+        
+        isolaser_extract_exon_parts             -g data/talon_observedOnly.sorted.fa             -o data/talon_observedOnly_db
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Fri Dec 29 18:33:24 2023]
+Finished job 5.
+2 of 18 steps (11%) done
+[Fri Dec 29 18:33:24 2023]
+Finished job 12.
+3 of 18 steps (17%) done
+[Fri Dec 29 18:33:24 2023]
+Finished job 17.
+4 of 18 steps (22%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-12-29T183254.903957.snakemake.log

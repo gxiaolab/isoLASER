@@ -1,0 +1,101 @@
+Config file config.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count    min threads    max threads
+--------------------  -------  -------------  -------------
+all                         1              1              1
+annotate_reads              3              1              1
+bam_sort_index              3              1              1
+extract_exonic_parts        1              1              1
+isolaser_filter             3              1              1
+isolaser_run                3              1              1
+total                      14              1              1
+
+Select jobs to execute...
+
+[Fri Dec 29 18:45:48 2023]
+rule annotate_reads:
+    input: bam/dlpfc_2.bam, bam/dlpfc_2.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_2.annotated.bam
+    jobid: 11
+    reason: Missing output files: bam/dlpfc_2.annotated.bam
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:45:48 2023]
+rule extract_exonic_parts:
+    input: data/talon_observedOnly.chr21.sorted.gz
+    output: data/talon_observedOnly_db/GeneList.tsv
+    jobid: 7
+    reason: Missing output files: data/talon_observedOnly_db/GeneList.tsv
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:45:48 2023]
+rule annotate_reads:
+    input: bam/dlpfc_3.bam, bam/dlpfc_3.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_3.annotated.bam
+    jobid: 16
+    reason: Missing output files: bam/dlpfc_3.annotated.bam
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+
+[Fri Dec 29 18:45:49 2023]
+rule annotate_reads:
+    input: bam/dlpfc_1.bam, bam/dlpfc_1.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_1.annotated.bam
+    jobid: 4
+    reason: Missing output files: bam/dlpfc_1.annotated.bam
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Fri Dec 29 18:45:49 2023]
+Error in rule annotate_reads:
+    jobid: 11
+    input: bam/dlpfc_2.bam, bam/dlpfc_2.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_2.annotated.bam
+    shell:
+        
+        isolaser_annotate             -b bam/dlpfc_2.bam             -t bam/dlpfc_2.transcriptome.sam             -g data/talon_observedOnly.chr21.sorted.gz             -o bam/dlpfc_2.annotated.bam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job annotate_reads since they might be corrupted:
+bam/dlpfc_2.annotated.bam
+[Fri Dec 29 18:45:49 2023]
+[Fri Dec 29 18:45:49 2023]
+Error in rule annotate_reads:
+    jobid: 16
+    input: bam/dlpfc_3.bam, bam/dlpfc_3.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_3.annotated.bam
+    shell:
+        
+        isolaser_annotate             -b bam/dlpfc_3.bam             -t bam/dlpfc_3.transcriptome.sam             -g data/talon_observedOnly.chr21.sorted.gz             -o bam/dlpfc_3.annotated.bam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Error in rule annotate_reads:
+    jobid: 4
+    input: bam/dlpfc_1.bam, bam/dlpfc_1.transcriptome.sam, data/talon_observedOnly.chr21.sorted.gz
+    output: bam/dlpfc_1.annotated.bam
+    shell:
+        
+        isolaser_annotate             -b bam/dlpfc_1.bam             -t bam/dlpfc_1.transcriptome.sam             -g data/talon_observedOnly.chr21.sorted.gz             -o bam/dlpfc_1.annotated.bam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job annotate_reads since they might be corrupted:
+bam/dlpfc_3.annotated.bam
+Removing output files of failed job annotate_reads since they might be corrupted:
+bam/dlpfc_1.annotated.bam
+[Fri Dec 29 18:45:50 2023]
+Finished job 7.
+1 of 14 steps (7%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-12-29T184546.011165.snakemake.log

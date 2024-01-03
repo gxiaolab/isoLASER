@@ -1,0 +1,6 @@
+Building DAG of jobs...
+MissingInputException in rule isolaser_joint in file /u/project/gxxiao4/giovas/projects/TAllele/test/out_test/isolaser_test.smk, line 164:
+Missing input files for rule isolaser_joint:
+    output: out/isolaser_joint.dlpfc.merged.mi_summary.tab
+    affected files:
+        data/talon_observedOnly_db

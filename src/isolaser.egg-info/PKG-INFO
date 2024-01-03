@@ -20,7 +20,7 @@ Requires-Dist: pysam
 Requires-Dist: pytabix
 Requires-Dist: pyfaidx
 Requires-Dist: biopython
-Requires-Dist: vcfpy
+Requires-Dist: PyVCF
 Requires-Dist: HTSeq
 Requires-Dist: networkx
 Requires-Dist: scikit-learn
