@@ -17,6 +17,7 @@ isoLASER performs gene-level variant calls, phasing, and splicing linkage analys
 - [Run isoLASER](#run-isolaser)
 - [Run isoLASER joint](#run-isolaser-joint)
 - [Make a nigiri plot](#make-a-nigiri-plot)
+- [Demo](#demo)
 - [Output](#output)
 - [Debug](#debug)
 
@@ -45,7 +46,7 @@ External software requirements:
 - [GATK](https://gatk.broadinstitute.org/hc/en-us) 
 - [samtools](http://www.htslib.org/)
 - [minimap2](https://github.com/lh3/minimap2)
-- Tabix
+- [tabix](http://www.htslib.org/doc/tabix.html)
 
 ## **Installation**
 
@@ -202,6 +203,10 @@ nigiri_plot -b {fofn} -c {region} -o {output.plot}
 ```
 
 <img src="nigiri.FAM221A.png" alt="FAM221A" width="600" heigth="600" class="center" />
+
+## **Demo**
+
+For a complete demo please check the **test_pipeline** repository.
 
 ## **Debug**
 If you experience any issues please submit your question to the *Issues* tab on this website. 
