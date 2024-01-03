@@ -206,14 +206,10 @@ nigiri_plot -b {fofn} -c {region} -o {output.plot}
 
 ## **Demo**
 
-For a complete demo please check the **test_pipeline** repository.
+For a complete demo please check the [test_pipeline](test_pipeline) repository.
 
 ## **Debug**
 If you experience any issues please submit your question to the *Issues* tab on this website. 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 10c133bca06b07254e2202f7e8fe6ee93cd3f50d
 
