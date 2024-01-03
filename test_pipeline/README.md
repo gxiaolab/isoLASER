@@ -45,4 +45,4 @@ nigiri_plot
   -o nigiri/dlpfc_2.gene_LSS.pdf
 ```
 
-![LSS](nigiri/dlpfc_2.gene_LSS.pdf)
+![LSS](nigiri/dlpfc_2.gene_LSS.png)
