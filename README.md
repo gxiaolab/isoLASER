@@ -50,14 +50,7 @@ External software requirements:
 
 ## **Installation**
 
-isoLASER is available through **PyPi**. To download simply type:
-
-```
-pip install isoLASER
-```
-
-The download was tested with PyPi version >= 20.0.1. Alternatively, you can clone this **GitHub** repository:
-
+You can clone this **GitHub** repository:
 ```
 git clone git@github.com:gxiaolab/isoLASER.git 
 cd isoLASER
@@ -83,6 +76,9 @@ If successful, the program is ready to use. The installation incorporates consol
 ```
 isoLASER --help
 ```
+
+Installation time varies depending on the number of dependencies that need to be installed. 
+Assuming all library dependencies are installed already, the installation of isoLASER should only take a few seconds.  
 
 ## *Preprocessing* 
 
