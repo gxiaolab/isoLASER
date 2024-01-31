@@ -17,6 +17,7 @@ isoLASER performs gene-level variant calls, phasing, and splicing linkage analys
 - [Run isoLASER](#run-isolaser)
 - [Run isoLASER joint](#run-isolaser-joint)
 - [Make a nigiri plot](#make-a-nigiri-plot)
+- [Demo](#demo)
 - [Output](#output)
 - [Debug](#debug)
 
@@ -45,17 +46,11 @@ External software requirements:
 - [GATK](https://gatk.broadinstitute.org/hc/en-us) 
 - [samtools](http://www.htslib.org/)
 - [minimap2](https://github.com/lh3/minimap2)
+- [tabix](http://www.htslib.org/doc/tabix.html)
 
 ## **Installation**
 
-isoLASER is available through **PyPi**. To download simply type:
-
-```
-pip install isoLASER
-```
-
-The download was tested with PyPi version >= 20.0.1. Alternatively, you can clone this **GitHub** repository:
-
+You can clone this **GitHub** repository:
 ```
 git clone git@github.com:gxiaolab/isoLASER.git 
 cd isoLASER
@@ -81,6 +76,9 @@ If successful, the program is ready to use. The installation incorporates consol
 ```
 isoLASER --help
 ```
+
+Installation time varies depending on the number of dependencies that need to be installed. 
+Assuming all library dependencies are installed already, the installation of isoLASER should only take a few seconds.  
 
 ## *Preprocessing* 
 
@@ -184,7 +182,7 @@ isoLASER_joint -f {fofn.tsv} -o {output.prefix} -t {transcript.db}
 Parse the `.mi_summary.tsv` file to obtain the list of events to plot
 
 ```
-isolaser_parse_mi_file --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {transcriptome.db} 
+nigiri_parse --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {transcriptome.db} 
 
 # output:
 {output.plot}.cis_events.bed
@@ -193,21 +191,21 @@ isolaser_parse_mi_file --mi {output.prefix.mi_summary.tsv} -o {output.plot} -t {
 Split the bam file
 
 ```
-isolaser_split_bam_by_allele -b {input.annot.bam} -v {var.string} -o {fofn} 
+nigiri_split -b {input.annot.bam} -v {var.string} -o {fofn} 
 ```
-Plot
+We use an adapted version of [ggsashimi](https://github.com/guigolab/ggsashimi)
 ```
-ggsashimi -b {fofn} -c {region} -o {output.plot} 
+nigiri_plot -b {fofn} -c {region} -o {output.plot} 
 ```
 
 <img src="nigiri.FAM221A.png" alt="FAM221A" width="600" heigth="600" class="center" />
+
+## **Demo**
+
+For a complete demo please check the [test_pipeline](test_pipeline) repository.
 
 ## **Debug**
 If you experience any issues please submit your question to the *Issues* tab on this website. 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 10c133bca06b07254e2202f7e8fe6ee93cd3f50d
 

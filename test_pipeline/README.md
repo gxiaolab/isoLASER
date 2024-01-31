@@ -3,14 +3,17 @@
 ## Data
 
 3 long-read RNA-seq samples extracted from the Dorsolateral prefrontal cortex tissue from 3 patients.
-ENCODE acc . 
 We subsetted reads mapping to chr21 only. 
 
 ## Snakemake 
 
+The following command should run the entire pipeline:
+
 ```
 snakemake -s isolaser_test.smk --cores 4
 ```
+
+On a regular computer, this should take less than 5 minutes.
 
 ![Flowchart](dag.svg)
 
@@ -45,4 +48,4 @@ nigiri_plot
   -o nigiri/dlpfc_2.gene_LSS.pdf
 ```
 
-![LSS](nigiri/dlpfc_2.gene_LSS.pdf)
+![LSS](nigiri/dlpfc_2.gene_LSS.png)
