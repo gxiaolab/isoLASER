@@ -669,12 +669,16 @@ def main():
         palette = read_palette(args.palette)
 
         bam_dict, overlay_dict, color_dict, id_list, label_dict = {"+":OrderedDict()}, OrderedDict(), OrderedDict(), [], OrderedDict()
-        if args.strand != "NONE": bam_dict["-"] = OrderedDict()
-        if args.junctions_bed != "": junctions_list = []
+
+        if args.strand != "NONE": 
+                bam_dict["-"] = OrderedDict()
+        if args.junctions_bed != "": 
+                junctions_list = []
 
         ALL_transcripts = []
 
         for IDX, bam, overlay_level, color_level, label_text in read_bam_input(args.bam, args.overlay, args.color_factor, args.labels):
+                
                 if not os.path.isfile(bam):
                         continue
                 

@@ -1,0 +1,3 @@
+bam/dlpfc_1.annotated.sorted.bam	out/isolaser.dlpfc_1.mi_summary.tab.gz	out/isolaser.dlpfc_1.gvcf
+bam/dlpfc_2.annotated.sorted.bam	out/isolaser.dlpfc_2.mi_summary.tab.gz	out/isolaser.dlpfc_2.gvcf
+bam/dlpfc_3.annotated.sorted.bam	out/isolaser.dlpfc_3.mi_summary.tab.gz	out/isolaser.dlpfc_3.gvcf

@@ -243,6 +243,11 @@ def main():
 		type = "int", 
 		default = 20,
 		help = "Minimum mapping quality to keep a read. [Default = 20]")
+	advanced_options.add_option("--include-continuous", 
+		dest = "include_continuous", 
+		action = "store_true",
+		default = False,
+		help = "Include reads with no splice junctions (`N` cigar). [Default = False]")
 	advanced_options.add_option("--kmer-size", 
 		dest = "kmer", 
 		type = "int", 

@@ -7,7 +7,7 @@ import random
 import sys
 
 
-def filter_reads(pysam_read, P_minMapQual):
+def filter_reads(pysam_read, P_minMapQual, include_continuous):
 	tags = dict(pysam_read.tags)
 
 	if pysam_read.mapping_quality < P_minMapQual:
@@ -34,7 +34,7 @@ def filter_reads(pysam_read, P_minMapQual):
 		return 'zt_nan', True
 	# elif pysam_read.get_tag('ZX') in ('Intergenic', 'Antisense', 'Genomic', 'ISM'):
 	# 	return 'zx_bad', True
-	elif "N" not in pysam_read.cigarstring:
+	elif "N" not in pysam_read.cigarstring and not include_continuous:
 		return 'no_jxn', True
 	else:
 		return 'good', False
@@ -110,7 +110,7 @@ def find_read_clusters(options, CHROM, start, end, GENE_LIST):
 	log_reads_filtered = defaultdict(int)
 
 	for read in bam_handle.fetch(CHROM, start = start, end = end):
-		Label, no_pass = filter_reads(read, options.minMapQ)
+		Label, no_pass = filter_reads(read, options.minMapQ, options.include_continuous)
 		log_reads_filtered[Label] += 1
 		if no_pass:
 			continue
@@ -207,9 +207,9 @@ def get_RC_partial_reads(options, RC_info, genome):
 
 	bam_handle = pysam.Samfile(options.input_bam, 'rb')
 
-	for read in bam_handle.fetch(CHROM, RCG_Start - 1, RCG_End + 1):
+	for read in bam_handle.fetch(CHROM, max(0, RCG_Start - 1), RCG_End + 1):
 
-		if filter_reads(read, options.minMapQ)[1]:
+		if filter_reads(read, options.minMapQ, options.include_continuous)[1]:
 			continue
 		if read.get_tag('ZG') != Gene_Id:
 			continue 
