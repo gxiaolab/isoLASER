@@ -3,6 +3,10 @@
 
 [github](https://github.com/gxiaolab/isoLASER/)
 
+
+**Hi, Thank you for your interest in our tool. Please be advised that the corresponding manuscript is under review, and we will be updating the source code based on the comments from the reviewers.**
+
+
 ## **About**
 
 isoLASER performs gene-level variant calls, phasing, and splicing linkage analysis using third-generation RNA sequencing data.
