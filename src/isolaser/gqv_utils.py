@@ -534,6 +534,8 @@ def overlap_vars_and_reads(SetOfVariants, SetOfReadIndexes, PartialReads, REFPOS
     
     for PartialRead, PR_attr in PartialReads.items():
         PR_s, PR_e = PR_attr['geno_blocks']
+        if PR_s == PR_e:
+            continue
         PR_gi = HTSeq.GenomicInterval(REFPOS.gi.chrom, PR_s, PR_e)
         erc_blocks[PR_gi] += PartialRead
 
@@ -929,7 +931,7 @@ def write_vcf_file(var_list, search_regions, genome_fasta, VCF_file, sample_name
         multi_allelic = len(ALTs.split(',')) > 2
 
         if var_is_mnp or multi_allelic:
-            print('skipping', POS, LONG_REF, ALTs)
+            SOFTMAN.print_time_stamp(f'\t[warning] skipping variant at position {POS} {LONG_REF}>{ALTs}')
             continue
 
         PL = ','.join(map(str, PL))

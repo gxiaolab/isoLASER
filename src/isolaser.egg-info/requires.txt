@@ -6,7 +6,6 @@ pysam
 pytabix
 pyfaidx
 biopython
-PyVCF
 HTSeq
 networkx
 scikit-learn

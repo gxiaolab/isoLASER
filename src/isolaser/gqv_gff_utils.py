@@ -258,7 +258,6 @@ def mi_parse_variants(ALL_VARS_FEAT, RCG_reads, TX_structure, RC_info, all_clust
             psi = np.array(list(intron_reads.values()))
             psi = np.mean(psi) 
             
-            print('doing', Gene_name, phasing_group, part_annot, ExonicPart, len(intron_reads)) ; sys.stdout.flush()
             mi_out = mutual_information(hap_clusters, intron_reads)
 
             (ami, cov, allelic_string, delta_psi) = mi_out 

@@ -166,7 +166,7 @@ def main():
 
 	description = """isoLASER"""
 
-	usage = """\n\tpython {} -b <file.bam> -g <genome.fa> -t <tx_str_dir> -o <prefix>""".format(sys.argv[0])
+	usage = """\n\tisolaser -b <file.bam> -g <genome.fa> -t <tx_str_dir> -o <prefix>""".format(sys.argv[0])
 
 	parser = OptionParser(usage = usage, description = description)
 	
@@ -268,10 +268,14 @@ def main():
 	parser.add_option_group(advanced_options)
 
 	global options
+	sys.setrecursionlimit(25000)
 
 	(options, args) = parser.parse_args()
+	
+	if len(sys.argv) < 3:
+		parser.print_help()
+		sys.exit(0)
 
-	sys.setrecursionlimit(int(1e6))
 
 	if not os.path.exists(options.input_bam):
 		parser.error('Bam file does not exist')

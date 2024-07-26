@@ -534,6 +534,8 @@ def overlap_vars_and_reads(SetOfVariants, SetOfReadIndexes, PartialReads, REFPOS
     
     for PartialRead, PR_attr in PartialReads.items():
         PR_s, PR_e = PR_attr['geno_blocks']
+        if PR_s == PR_e:
+            continue
         PR_gi = HTSeq.GenomicInterval(REFPOS.gi.chrom, PR_s, PR_e)
         erc_blocks[PR_gi] += PartialRead
 

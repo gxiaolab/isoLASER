@@ -134,7 +134,7 @@ def find_read_clusters(options, CHROM, start, end, GENE_LIST):
 		if gene_id not in GENE_LIST:
 			nr = sum([x for x in coord_dict.values() if x > 0])
 			s = sorted(coord_dict.keys())
-			ss, ee = s[0], s[-1]
+			ss, ee = s[0], s[-1] 
 			sys.stderr.write(f"[Warning] gene id {gene_id} not found in {options.gff_file} reads = {nr} coord = {ss}-{ee}\n")
 			gene_key = (gene_id, CHROM, ss, ee, '.')
 		else:
@@ -224,7 +224,7 @@ def get_RC_partial_reads(options, RC_info, genome):
 		RCG_reads[read.query_name]['seq'] = read.query_alignment_sequence
 		RCG_reads[read.query_name]['ZT']  = read.get_tag('ZT')
 		# RCG_reads[read.query_name]['ZX']  = read.get_tag('ZX')
-					
+						
 	bam_handle.close()
 
 	k_ext = (options.kmer - 2)
@@ -244,7 +244,6 @@ def get_RC_partial_reads(options, RC_info, genome):
 		for read_name, read_attr in RCG_reads.items():
 			for g_i, geno_block in enumerate(read_attr['geno_blocks']):
 				if geno_block[0] < RCB_end and RCB_start < geno_block[1]: 
-	
 					read_name_partial = f'{read_name}:{RC_i}_{g_i}' 
 					sub_r_blocks = list(read_attr['read_blocks'][g_i])
 					sub_g_blocks = list(read_attr['geno_blocks'][g_i])

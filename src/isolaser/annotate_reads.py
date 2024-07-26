@@ -25,6 +25,16 @@ def reads_by_gene(bam_file):
 
 
 
+def read_by_assignment(assign_file):
+	
+	assignment_map = {}
+
+	with open(assign_file, 'r') as fh:
+		for line in fh:
+			line = line.strip().split('\t')
+			assignment_map[line[0]] = line[1]
+
+	return assignment_map
 
 
 
@@ -36,20 +46,37 @@ def main():
 	parser = OptionParser(usage = usage, description = description)
 	
 	parser.add_option("-b", "--input-bam",   
-		dest = "input_bam")
-	parser.add_option("-t", "--tx-bam",   
-		dest = "transcriptome_bam")
+		dest = "input_bam", help = "[required]")
+
 	parser.add_option("-o", "--output-bam",  
-		dest = "output_bam")
+		dest = "output_bam", help = "[required]")
 	parser.add_option("-g", "--gtf_file", 
-		dest = "gtf_file")
+		dest = "gtf_file", help = "[required]")
+	
 	parser.add_option("--padding", 
 		dest = "padding", type = int, default = 10)
 
+	annotation_group = OptionGroup(parser, "Annotation Options (Select one)")
+
+	annotation_group.add_option("-t", "--tx-bam",   
+		dest = "transcriptome_bam")
+	annotation_group.add_option("-a", "--assignment-file",   
+		dest = "assignment_file")
+
+	parser.add_option_group(annotation_group)
+	
+	
+
 	(options, args) = parser.parse_args()
 
-	transcriptome_map = reads_by_gene(options.transcriptome_bam)
-
+	if options.transcriptome_bam is not None:
+		sys.stderr.write(f"Reading transcriptome bam file: {options.transcriptome_bam}\n")
+		transcriptome_map = reads_by_gene(options.transcriptome_bam)
+	elif options.assignment_file is not None:
+		sys.stderr.write(f"Reading assignment file: {options.assignment_file}\n")
+		transcriptome_map = read_by_assignment(options.assignment_file)
+	else:
+		raise ValueError(f"Transcriptome information not provided\n")
 
 	bh = pysam.AlignmentFile(options.input_bam)
 	oh = pysam.AlignmentFile(options.output_bam, 'wb', template = bh)
