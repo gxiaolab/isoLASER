@@ -58,8 +58,9 @@ def get_transcript_structure(args):
 
             if j < len(exon_list) - 1:
 
-                print(Gene_id, Gene_Name, transcript_id, j, exon_list[j]) ; sys.stdout.flush() ; i_s, i_e = (exon_list[j][1], exon_list[j + 1][0])
-                intron_iv = HTSeq.GenomicInterval(CHROM, i_s, i_e, Gene_iv.strand)
+                i_s, i_e = (exon_list[j][1], exon_list[j + 1][0])
+                try: intron_iv = HTSeq.GenomicInterval(CHROM, i_s, i_e, Gene_iv.strand)
+                except: print(Gene_id, Gene_Name, transcript_id, i_s, i_e) ; sys.stdout.flush()      
                 spl_coords[intron_iv] += ('intron', transcript_id)
 
             e_s, e_e = (exon_list[j][0], exon_list[j][1])
