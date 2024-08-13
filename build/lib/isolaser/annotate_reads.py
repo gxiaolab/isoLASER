@@ -53,7 +53,10 @@ def main():
 	parser.add_option("-g", "--gtf_file", 
 		dest = "gtf_file", help = "[required]")
 	
-	annotation_group = OptionGroup(parser, "Annotation Options")
+	parser.add_option("--padding", 
+		dest = "padding", type = int, default = 10)
+
+	annotation_group = OptionGroup(parser, "Annotation Options (Select one)")
 
 	annotation_group.add_option("-t", "--tx-bam",   
 		dest = "transcriptome_bam")
@@ -62,8 +65,7 @@ def main():
 
 	parser.add_option_group(annotation_group)
 	
-	parser.add_option("--padding", 
-		dest = "padding", type = int, default = 10)
+	
 
 	(options, args) = parser.parse_args()
 

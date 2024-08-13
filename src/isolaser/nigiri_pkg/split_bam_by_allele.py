@@ -92,7 +92,7 @@ def main():
 				if r.is_del or r.is_refskip:
 					continue
 				
-				base = r.alignment.query_sequence[r.query_position]
+				base  = r.alignment.query_sequence[r.query_position]
 				tx_id = r.alignment.get_tag('ZT')
 
 				try:

@@ -12,6 +12,7 @@ from scipy.stats import chisquare, norm, chi2_contingency
 
 from . import gqv_software_management as SOFTMAN
 
+
 def split_GenomicInterval_string(gi_string):
     parsed_groups = re.search(r'(\w+):\[(\d+),(\d+)\)/([+-])', gi_string)
     chrom, start, end, strand = parsed_groups.groups()
@@ -143,7 +144,8 @@ def process_reads_into_txs(RCG_reads, TX_structure):
         transcript_id = attr['ZT']
         RCG_transcripts[transcript_id].add(read_name)
 
-    IntronReads = defaultdict(dict)
+    IntronReads = defaultdict(dict) 
+    
 
     for (part_annot, ExonicPart), part_alleles in TX_structure.items():
 
@@ -196,15 +198,19 @@ def asts(RCG_reads, hap_clusters):
 
 
 
-def mi_parse_variants(ALL_VARS_FEAT, RCG_reads, TX_structure, RC_info, all_clusters, polyfits, normalfits):
+def mi_parse_variants(ALL_VARS_FEAT, RCG_reads, gene_pickle_file, RC_info, all_clusters, polyfits, normalfits):
 
 
     (Gene_name, CHROM, GENE_Start, GENE_End, STRAND), RCB_list = RC_info
     Gene_coords = f'{CHROM}\t{GENE_Start}\t{GENE_End}\t{STRAND}'
 
+    with open(gene_pickle_file, 'rb') as tb:
+        TX_structure = pickle.load(tb)
+
     IntronReads = process_reads_into_txs(RCG_reads, TX_structure)
 
     printing_lines = []
+    haplotagged_reads = defaultdict(dict)
 
     ### Haplotype - exonic_part linkage
 
@@ -215,6 +221,7 @@ def mi_parse_variants(ALL_VARS_FEAT, RCG_reads, TX_structure, RC_info, all_clust
         for cluster_id, read_dict in clusters.items():
             for read_i in read_dict:
                 hap_clusters[read_i] = cluster_id 
+                haplotagged_reads[(read_i, phasing_group)] = (cluster_id, Gene_name, CHROM)
 
         ## ASTS 
         asts_chi_p, label, asts_allelic_string = asts(RCG_reads, hap_clusters)
@@ -300,4 +307,4 @@ def mi_parse_variants(ALL_VARS_FEAT, RCG_reads, TX_structure, RC_info, all_clust
                 outline2 = f"{ami:.3f}\t{norm_p:.3e}\t{cov}\t{psi:.3f}\t{allelic_ratio:.3f}\t{allelic_string}\t{label}\t{delta_psi:.3f}"
                 printing_lines.append(outline1 + '\t' + outline2)
 
-    return printing_lines 
+    return printing_lines , haplotagged_reads

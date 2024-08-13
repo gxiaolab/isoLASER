@@ -43,7 +43,6 @@ def main():
 	cis_genes = defaultdict(set)
 
 	df = pd.read_csv(options.mi_file, sep = '\t', escapechar='#')
-
 	df = df[(df.label == "cis")]
 
 	for row in df.itertuples():
@@ -78,16 +77,16 @@ def main():
 	logging.info(f"writing to:\n\t- {options.output_file}.cis_events.bed\n\t- {options.output_file}.cis_genes.tsv")
 	logging.info(f"found {len(set(var_info) & set(cis_genes))}  genes with cis events")
 
-	for gene, var_set in var_info.items():
+	for gene_id, var_set in var_info.items():
 
-		if gene not in cis_genes or not var_set:
+		if gene_id not in cis_genes or not var_set:
 			continue
 		
 		var_set = list(var_set)
 
 		for (variant, exonic_part, dpsi) in var_set[:]:
 			
-			if exonic_part not in cis_genes[gene]:
+			if exonic_part not in cis_genes[gene_id]:
 				var_set.remove((variant, exonic_part, dpsi))
 			else:
 				
@@ -100,7 +99,7 @@ def main():
 
 		gene_interval = "{0}:{1}-{2}".format(*gene_lst[gene_id])
 
-		gene_line = [gene, best_var, gene_interval, dpsi]
+		gene_line = [gene_id, best_var, gene_interval, dpsi]
 		genf.write('\t'.join(map(str, gene_line)) + '\n')
 
 	bedf.close()

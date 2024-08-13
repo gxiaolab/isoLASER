@@ -11,33 +11,33 @@ def filter_reads(pysam_read, P_minMapQual, include_continuous):
 	tags = dict(pysam_read.tags)
 
 	if pysam_read.mapping_quality < P_minMapQual:
-		return 'mapq', True
+		return 'low_mappinq_qual', True
 	elif len(pysam_read.query_alignment_sequence) < 100:
-		return 'rlen', True
+		return 'short_read_length', True
 	elif len(pysam_read.query_alignment_sequence)/len(pysam_read.query_sequence) < 0.67:
-		return 'sclip', True
+		return 'large_soft_clip', True
 	elif "N" in pysam_read.query_alignment_sequence:
-		return 'N', True
+		return 'N in seq.', True
 	elif pysam_read.is_unmapped:
-		return 'unmap', True
+		return 'unmapped', True
 	elif pysam_read.is_secondary:
-		return 'sec', True
+		return 'secondary', True
 	elif pysam_read.is_duplicate:
-		return 'dup', True
+		return 'duplicate', True
 	elif pysam_read.is_qcfail:
-		return 'qcfail', True
+		return 'qc_fail', True
 	elif "NH" in tags and tags["NH"] > 1:
-		return 'mmap', True
+		return 'multi-mapped', True
 	elif pysam_read.is_supplementary:
-		return 'supp', True
+		return 'chimeric_read', True
 	elif pysam_read.get_tag('ZT') == 'nan':
-		return 'zt_nan', True
+		return 'unassigned_tx_id', True
 	# elif pysam_read.get_tag('ZX') in ('Intergenic', 'Antisense', 'Genomic', 'ISM'):
 	# 	return 'zx_bad', True
 	elif "N" not in pysam_read.cigarstring and not include_continuous:
-		return 'no_jxn', True
+		return 'mono_exonic_read', True
 	else:
-		return 'good', False
+		return 'good reads', False
 
 
 
@@ -104,14 +104,14 @@ def get_sample_name(input_bam, sample_name):
 def find_read_clusters(options, CHROM, start, end, GENE_LIST):
 	
 	read_block_coords = defaultdict(lambda : defaultdict(lambda : 0))
+	log_reads_filtered = defaultdict(int)
 
 	bam_handle = pysam.Samfile(options.input_bam, 'rb')
-
-	log_reads_filtered = defaultdict(int)
 
 	for read in bam_handle.fetch(CHROM, start = start, end = end):
 		Label, no_pass = filter_reads(read, options.minMapQ, options.include_continuous)
 		log_reads_filtered[Label] += 1
+		
 		if no_pass:
 			continue
 
@@ -124,8 +124,9 @@ def find_read_clusters(options, CHROM, start, end, GENE_LIST):
 			
 	bam_handle.close()
 
+	# log reads filtered
 	for skip_read_label, skip_read_count in log_reads_filtered.items():
-		sys.stderr.write(f"[Warning] Reads filtered by {skip_read_label} = {skip_read_count}\n")
+		sys.stderr.write(f"[Warning] Read filtering: {skip_read_label}\t= {skip_read_count}\n")
 
 	Read_Clusters_Genes = defaultdict(list)
 
@@ -154,7 +155,6 @@ def find_read_clusters(options, CHROM, start, end, GENE_LIST):
 		
 		for coord, cov in coords_cov: 
 			Cum_Cov_block += cov			
-			log10FC = np.log10(Cum_Cov_block + 1) - np.log10(Prv_Cov_block + 1)
 			log2FC = np.log2(Cum_Cov_block + 1) - np.log2(Prv_Cov_block + 1)
 
 			if abs(log2FC) >= 1.0 or (Cum_Cov_block * Prv_Cov_block == 0) :	

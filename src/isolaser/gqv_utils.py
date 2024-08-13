@@ -807,6 +807,18 @@ def write_mutinfo_file(mi_outlines, outfile, write_header):
     f.close()
 
 
+def write_tagged_file(tagged_outlines, outfile, write_header):
+    if write_header:
+        f = open(outfile, 'w')
+        f.write("#read_name\tphasing_group\thaplotype\tGene_name\tchrom\n")
+    else:
+        f = open(outfile, 'a')
+
+    for (read_id, phasing_group), value in tagged_outlines.items():
+        outline = f"{read_id}\t{phasing_group}" + '\t' + '\t'.join(map(str, list(value)))
+        f.write(outline + "\n")
+    f.close()
+
 
 def write_vcf_file(var_list, search_regions, genome_fasta, VCF_file, sample_name, options, write_header = False):
     
@@ -931,7 +943,7 @@ def write_vcf_file(var_list, search_regions, genome_fasta, VCF_file, sample_name
         multi_allelic = len(ALTs.split(',')) > 2
 
         if var_is_mnp or multi_allelic:
-            SOFTMAN.print_time_stamp(f'\t[warning] skipping variant at position {POS} {LONG_REF}>{ALTs}')
+            SOFTMAN.print_time_stamp(f'\t[warning] skipping variant at position {POS}-{END} {LONG_REF}>{ALTs}')
             continue
 
         PL = ','.join(map(str, PL))

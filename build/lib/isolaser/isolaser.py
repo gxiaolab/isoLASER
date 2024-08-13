@@ -38,8 +38,6 @@ def process_read_cluster(RC_info):
 	n_RCBs  = len(RCB_reads)
 	n_Reads = sum(len(attr[1]) for rcb, attr in RCB_reads.items()) 
 
-	SOFTMAN.print_time_stamp(f"\tRCG: {GeneName} {CHROM}:{RCG_Start}-{RCG_End} RCBs = {n_RCBs} pReads = {n_Reads}") 
-
 	for RCB_i, (RCB, RCB_attr) in enumerate(RCB_reads.items()):
 	
 		(RCB_Start, RCB_End) = RCB
@@ -100,26 +98,22 @@ def process_read_cluster(RC_info):
 	
 
 	if options.run_mode == "Training":
-		mi_outlines = []
+		mi_outlines, haplotagged_reads = [], []
 	elif not os.path.exists(gene_pickle_file):
-		mi_outlines = []
+		mi_outlines, haplotagged_reads = [], []
 	elif not hap_clusters:
-		mi_outlines = []
+		mi_outlines, haplotagged_reads = [], []
 	else:
-		tb = open(gene_pickle_file, 'rb')
-		TX_structure = pickle.load(tb)
-
-		mi_outlines = gqv_gff_utils.mi_parse_variants(VAR_LIST_RC, RCG_reads, TX_structure, 
-														RC_info, hap_clusters, ami_polyfits, ami_normalfits)
-		del TX_structure
-		tb.close()
+		mi_outlines, haplotagged_reads = gqv_gff_utils.mi_parse_variants(VAR_LIST_RC, 
+											RCG_reads, gene_pickle_file, RC_info, 
+											hap_clusters, ami_polyfits, ami_normalfits)
 		
 	t9 = time()
 
-	SOFTMAN.print_time_stamp(f"\tRCG:  {CHROM}:{RCG_Start}-{RCG_End} tx_str = {t9-t8:.2e} phaser = {t8-t7:.2e} main = {t7-t0:.2e} done")
+	SOFTMAN.print_time_stamp(f"\tRCG: {GeneName} {CHROM}:{RCG_Start}-{RCG_End} Reads = {len(RCG_reads)} done")
 	SOFTMAN.merge_copy(VAR_LIST_RC, REF_LIST_RC)
 
-	return VAR_LIST_RC, mi_outlines
+	return VAR_LIST_RC, mi_outlines, haplotagged_reads
 
 
 
@@ -137,7 +131,7 @@ def parse_chroms(options):
 
 	if not common_chroms:
 		# Unmatched assemblies
-		raise ValueError("Invalid genome reference\n")
+		raise ValueError(f"Invalid genome reference: {options.Genome}\n")
 	elif region == "All":
 		# Default: all chromosome
 		Region_List = [(chrom, None, None) for chrom in common_chroms]
@@ -166,7 +160,7 @@ def main():
 
 	description = """isoLASER"""
 
-	usage = """\n\tisolaser -b <file.bam> -g <genome.fa> -t <tx_str_dir> -o <prefix>""".format(sys.argv[0])
+	usage = """\n\tisolaser -b <file.bam> -f <genome.fa> -t <tx_str_dir> -o <prefix>""".format(sys.argv[0])
 
 	parser = OptionParser(usage = usage, description = description)
 	
@@ -327,8 +321,9 @@ def main():
 
 	for (CHROM, fetch_start, fetch_end) in Search_Regions:
 
-		CHROM_VARS_FEAT   = collections.defaultdict(dict)
-		ALL_VARS_MUTINFO  = []
+		CHROM_VAR_LIST = collections.defaultdict(dict)
+		CHROM_TAGGED_READS = collections.defaultdict(dict)
+		CHROM_MI_LIST  = []
 
 		GENE_LIST = gqv_gff_utils.get_genes_from_gtf(options.gff_file, CHROM, fetch_start, fetch_end)
 
@@ -346,35 +341,38 @@ def main():
 		pool = multiprocessing.Pool(n) 
 		pool_output = pool.imap_unordered(process_read_cluster, RCG)
 
-		for (RC_VAR_LIST, RC_MI_LIST) in pool_output: 
-			SOFTMAN.merge_copy(CHROM_VARS_FEAT, RC_VAR_LIST)
-			ALL_VARS_MUTINFO.extend(RC_MI_LIST)
+		for (RC_VAR_LIST, RC_MI_LIST, RC_TAGGED_READS) in pool_output: 
+			SOFTMAN.merge_copy(CHROM_VAR_LIST, RC_VAR_LIST)
+			SOFTMAN.merge_copy(CHROM_TAGGED_READS, RC_TAGGED_READS)
+			CHROM_MI_LIST.extend(RC_MI_LIST)
 
 		pool.terminate()
-			
-			
+		pool.close()	
 
 		if options.run_mode == "Variant_Caller":
 			SM = gqv_bam_utils.get_sample_name(options.input_bam, options.sample_name)
 
-			gqv_utils.write_vcf_file(CHROM_VARS_FEAT, Search_Regions, options.Genome,
+			gqv_utils.write_vcf_file(CHROM_VAR_LIST, Search_Regions, options.Genome,
 										options.output_prefix + ".gvcf", SM, options,
 										write_header = write_header)
 
-			gqv_utils.write_mutinfo_file(ALL_VARS_MUTINFO, 
+			gqv_utils.write_mutinfo_file(CHROM_MI_LIST, 
 										options.output_prefix + ".mi_summary.tab",
 										write_header = write_header)
 
+			gqv_utils.write_tagged_file(CHROM_TAGGED_READS, 
+										options.output_prefix + ".haplotagged_reads.tab",
+										write_header = write_header)
+
 		elif options.run_mode == "Training":
-			gqv_utils.write_feat_file(CHROM_VARS_FEAT, 
+			gqv_utils.write_feat_file(CHROM_VAR_LIST, 
 										options.output_prefix + ".feature_matrix.tab",
 										write_header = write_header)
 
 		write_header = False 
 
 
-	SOFTMAN.print_time_stamp("Job Done")
-	SOFTMAN.print_time_stamp(f"Output prefix: {options.output_prefix}")
+	SOFTMAN.print_time_stamp(f"Completed! Output prefix: {options.output_prefix}")
 
 
 

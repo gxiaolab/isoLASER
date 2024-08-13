@@ -37,7 +37,7 @@ def main():
 	parser.add_option('-b', dest = 'bam', \
 		help = 'bam file (sorted and indexed)')
 	parser.add_option('-v', dest = 'var', \
-		help = 'variant string `CHROM:POS0-POS1:REF>ALT`')
+		help = 'variant string `CHROM:POS0:REF>ALT`')
 	parser.add_option('--hla', dest = 'hla_sam', \
 		help = 'hla aligned reads', default = None)
 	parser.add_option('-o', dest = 'output_file', \
@@ -64,7 +64,9 @@ def main():
 
 
 	# process var
-	chrom, POS0, REF, ALT = re.split(':|>', options.var)
+	print(options.var) ; sys.stdout.flush()
+	chrom, POS0, alleles = options.var.split(':')
+	REF, ALT = alleles.split('>')
 
 	POS = int(POS0) 
 	END = int(POS0)
@@ -104,7 +106,7 @@ def main():
 					hla_contig = 'allele'
 
 				if base == REF:
-					lab, is_bad = gqv_bam_utils.filter_reads(r.alignment, P_minMapQual = 10)
+					lab, is_bad = gqv_bam_utils.filter_reads(r.alignment, P_minMapQual = 10, include_continuous = False)
 					read_counter[('ref', lab)] += 1
 					if not is_bad:
 						tx_allele_counter[REF][tx_id] += 1
@@ -113,7 +115,7 @@ def main():
 						HLA_TYPING[REF][hla_contig] += 1
 
 				elif base == ALT:
-					lab, is_bad = gqv_bam_utils.filter_reads(r.alignment, P_minMapQual = 10)
+					lab, is_bad = gqv_bam_utils.filter_reads(r.alignment, P_minMapQual = 10, include_continuous = False)
 					read_counter[('alt', lab)] += 1
 					if not is_bad:
 						tx_allele_counter[ALT][tx_id] += 1
