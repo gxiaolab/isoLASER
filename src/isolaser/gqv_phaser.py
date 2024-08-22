@@ -141,17 +141,18 @@ def table_genotyping(OUTPUT_LINES, RCG_variants, RCG_reads, mat, QUAL_weights, o
             diff_mat = np.abs(hap_mat - sub_mat) 
 
             for j, (POS, ALLELE) in enumerate(RCG_variants):
-                if (vars_hete[j] and ploidy == 2) or (vars_homo[j] and j in sub_VarList):
+                if j in sub_VarList:
+                    if (vars_hete[j] and ploidy == 2) or (vars_homo[j]):
 
-                    normHapDistance = np.log(np.nanmean(diff_mat[:, j]) + 1e-5)
-                    OUTPUT_LINES[POS][ALLELE]['FEAT']['ndHAP'] = normHapDistance    
-                                                                        
-                    GT_array = haplotypes[:, j] - 1 
-                    if ploidy == 1:
-                        GT_array = [GT_array[0], GT_array[0]]
+                        normHapDistance = np.log(np.nanmean(diff_mat[:, j]) + 1e-5)
+                        OUTPUT_LINES[POS][ALLELE]['FEAT']['ndHAP'] = normHapDistance    
+                                                                            
+                        GT_array = haplotypes[:, j] - 1 
+                        if ploidy == 1:
+                            GT_array = [GT_array[0], GT_array[0]]
 
-                    OUTPUT_LINES[POS][ALLELE]['FEAT']['GT'] = GT_array 
-                    OUTPUT_LINES[POS][ALLELE]['FEAT']['PG'] = PhasGrp
+                        OUTPUT_LINES[POS][ALLELE]['FEAT']['GT'] = GT_array 
+                        OUTPUT_LINES[POS][ALLELE]['FEAT']['PG'] = PhasGrp
 
             PhasGrp += 1
 
