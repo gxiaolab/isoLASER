@@ -35,7 +35,7 @@ def get_transcript_structure(args):
 
     TX_structure_dict  = defaultdict(dict)
 
-    transcript_dict    = defaultdict(list)
+    transcript_dict    = defaultdict(set)
 
     ### Genomic Arrays
     spl_coords = HTSeq.GenomicArrayOfSets(chroms = [CHROM], stranded = True)
@@ -48,10 +48,11 @@ def get_transcript_structure(args):
             continue
             
         if record.feature == 'exon':
-            transcript_dict[record.transcript_id].append((record.start, record.end))
+            transcript_dict[record.transcript_id].add((record.start, record.end))
 
 
     for transcript_id, exon_list in transcript_dict.items():
+        exon_list = list(exon_list)
         exon_list.sort(key = lambda xn : xn[0])
 
         for j in range(len(exon_list)):
@@ -59,7 +60,8 @@ def get_transcript_structure(args):
             if j < len(exon_list) - 1:
 
                 i_s, i_e = (exon_list[j][1], exon_list[j + 1][0])
-                intron_iv = HTSeq.GenomicInterval(CHROM, i_s, i_e, Gene_iv.strand)
+                try: intron_iv = HTSeq.GenomicInterval(CHROM, i_s, i_e, Gene_iv.strand)
+                except: print(Gene_id, Gene_Name, transcript_id, i_s, i_e) ; sys.stdout.flush()      
                 spl_coords[intron_iv] += ('intron', transcript_id)
 
             e_s, e_e = (exon_list[j][0], exon_list[j][1])

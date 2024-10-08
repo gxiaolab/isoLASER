@@ -289,10 +289,10 @@ def main():
 	global clf_dict, ami_polyfits, ami_normalfits
 
 	if options.platform == "PacBio":
-		with open(f"{PACKAGE_PATH}/glm/gm12878_sequel2.MERGED.feature_matrix.tab.proc_1.csv.f1.glm.pickle", 'rb') as fid:
+		with open(f"{PACKAGE_PATH}/glm/GM12878_PBSQ2_F1.pickle", 'rb') as fid:
 			clf_dict = pickle.load(fid)
 	elif options.platform == "Nanopore":
-		with open(f"{PACKAGE_PATH}/glm/merged.GTEX.MERGED.ALLCHR.feature_matrix.tab.proc_1.csv.f1.glm.pickle", 'rb') as fid:
+		with open(f"{PACKAGE_PATH}/glm/GTEx_ONT_F1.pickle", 'rb') as fid:
 			clf_dict = pickle.load(fid)
 	else:
 		parser.error("Platform not valid {}. Select from [PacBio, Nanopore]\n".format(options.platform))	
