@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: isolaser
 Version: 0.0.2
 Summary: Exonic Part centered allele-specific splicing analysis
@@ -23,14 +23,13 @@ Requires-Dist: biopython
 Requires-Dist: HTSeq
 Requires-Dist: networkx
 Requires-Dist: scikit-learn
+Dynamic: license-file
 
 # **isoLASER**
 [![](https://img.shields.io/badge/isoLASER-v0.0.0.1-blue)](https://test.pypi.org/project/isoLASER/)
 
 [github](https://github.com/gxiaolab/isoLASER/)
 
-
-**Hi, Thank you for your interest in our tool. Please be advised that the corresponding manuscript is under review, and we will be updating the source code based on the comments from the reviewers.**
 
 
 ## **About**
