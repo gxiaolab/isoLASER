@@ -52,6 +52,12 @@ External software requirements:
 
 ## **Installation**
 
+First, it is recommended to install IsoLASER in a virtual environment.
+
+```
+conda create -n isolaser_env python=3.8
+```
+
 You can clone this **GitHub** repository:
 ```
 git clone git@github.com:gxiaolab/isoLASER.git 
@@ -60,13 +66,13 @@ python -m build
 pip install .
 ```
 
-It is recommended to install IsoLASER in a virtual environment.
+Or you can install directly from **PyPI**:
 
 ```
-conda create -n isolaser_env python=3.8
+pip install isolaser
 ```
 
-You can also download the **Singularity** container:
+Alternatively, you can also download the **Singularity** container:
 
 ```
 singularity pull library://giovas/collection/s6
