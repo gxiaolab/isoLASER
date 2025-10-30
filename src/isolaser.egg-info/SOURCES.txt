@@ -27,6 +27,7 @@ src/isolaser.egg-info/dependency_links.txt
 src/isolaser.egg-info/entry_points.txt
 src/isolaser.egg-info/requires.txt
 src/isolaser.egg-info/top_level.txt
+src/isolaser/glm/GM12878_ONT_ROC.pickle
 src/isolaser/glm/GM12878_PBSQ2_F1.pickle
 src/isolaser/glm/GTEx_ONT_F1.pickle
 src/isolaser/glm/__init__.py

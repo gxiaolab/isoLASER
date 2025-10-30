@@ -292,7 +292,8 @@ def main():
 		with open(f"{PACKAGE_PATH}/glm/GM12878_PBSQ2_F1.pickle", 'rb') as fid:
 			clf_dict = pickle.load(fid)
 	elif options.platform == "Nanopore":
-		with open(f"{PACKAGE_PATH}/glm/GTEx_ONT_F1.pickle", 'rb') as fid:
+		with open(f"{PACKAGE_PATH}/glm/GM12878_ONT_ROC.pickle", 'rb') as fid: 
+		#with open(f"{PACKAGE_PATH}/glm/GTEx_ONT_F1.pickle", 'rb') as fid:
 			clf_dict = pickle.load(fid)
 	else:
 		parser.error("Platform not valid {}. Select from [PacBio, Nanopore]\n".format(options.platform))	
