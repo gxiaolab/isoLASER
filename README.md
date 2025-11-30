@@ -1,6 +1,9 @@
 # **isoLASER**
 [![](https://img.shields.io/badge/isoLASER-v0.0.0.1-blue)](https://test.pypi.org/project/isoLASER/)
 
+
+[Publication](https://www.nature.com/articles/s41467-025-64605-6)
+
 [github](https://github.com/gxiaolab/isoLASER/)
 
 
