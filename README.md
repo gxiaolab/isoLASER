@@ -128,7 +128,7 @@ The output is a sam file where the contigs are transcript ids.
 Next, filter for secondary, supplementary and trans-gene reads whilst annotating with transcript ids. 
 
 ```
-isolaser_filter_and_annotate -b {input.bam} -t {transcriptome.sam} -g {annot.gtf} -o {input.annot}
+isolaser_annotate -b {input.bam} -t {transcriptome.sam} -g {annot.gtf} -o {input.annot}
 ```
 The output is a bam file: `input.annot.bam` after some basic filtering (secondary and supplemental reads), trans-gene filtering and the `ZG` and `ZT` tags with the name of the corresponding gene and transcript id for each read.  
 
@@ -137,7 +137,7 @@ The output is a bam file: `input.annot.bam` after some basic filtering (secondar
 IsoLASER uses an exon-centric approach to analyze splicing and exonic-parts are a great granular approach to understand local splicing changes. 
 
 ```
-isolaser_extract_exonic_parts -g {annot.gtf} -o {transcript.db}
+isolaser_extract_exon_parts -g {annot.gtf} -o {transcript.db}
 ```
 
 The output is a new directory `transcript.db` that contains a pickle file per gene encapsulating all the exonic parts and transcripts associated with them.   
