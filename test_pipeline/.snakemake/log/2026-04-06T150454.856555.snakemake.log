@@ -1,0 +1,124 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 3
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count
+--------------------  -------
+all                         1
+annotate_reads              3
+bam_sort_index              3
+convert_gff_to_fasta        1
+extract_exonic_parts        1
+isolaser_combine_vcf        1
+isolaser_filter             3
+isolaser_joint              1
+isolaser_run                3
+map_to_transcriptome        3
+write_fofn                  1
+total                      21
+
+Select jobs to execute...
+
+[Mon Apr  6 15:04:56 2026]
+rule convert_gff_to_fasta:
+    input: data/gencode.v32.chr21.gtf.gz, data/GRCh38.chr21.fa
+    output: data/talon_observedOnly.sorted.fa
+    jobid: 6
+    reason: Missing output files: data/talon_observedOnly.sorted.fa; Updated input files: data/gencode.v32.chr21.gtf.gz, data/GRCh38.chr21.fa
+    resources: tmpdir=/tmp
+
+
+[Mon Apr  6 15:04:56 2026]
+rule extract_exonic_parts:
+    input: data/gencode.v32.chr21.gtf.gz
+    output: data/talon_observedOnly_db/GeneList.tsv
+    jobid: 7
+    reason: Missing output files: data/talon_observedOnly_db/GeneList.tsv; Set of input files has changed since last execution
+    resources: tmpdir=/tmp
+
+[Mon Apr  6 15:04:58 2026]
+Finished job 7.
+1 of 21 steps (5%) done
+[Mon Apr  6 15:04:58 2026]
+Finished job 6.
+2 of 21 steps (10%) done
+Select jobs to execute...
+
+[Mon Apr  6 15:04:58 2026]
+rule map_to_transcriptome:
+    input: bam/dlpfc_3.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_3.fq, bam/dlpfc_3.transcriptome.sam
+    jobid: 17
+    reason: Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=3
+    resources: tmpdir=/tmp
+
+
+[Mon Apr  6 15:04:58 2026]
+rule map_to_transcriptome:
+    input: bam/dlpfc_2.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_2.fq, bam/dlpfc_2.transcriptome.sam
+    jobid: 12
+    reason: Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=2
+    resources: tmpdir=/tmp
+
+
+[Mon Apr  6 15:04:58 2026]
+rule map_to_transcriptome:
+    input: bam/dlpfc_1.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_1.fq, bam/dlpfc_1.transcriptome.sam
+    jobid: 5
+    reason: Input files updated by another job: data/talon_observedOnly.sorted.fa
+    wildcards: i=1
+    resources: tmpdir=/tmp
+
+[Mon Apr  6 15:04:59 2026]
+Error in rule map_to_transcriptome:
+    jobid: 17
+    input: bam/dlpfc_3.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_3.fq, bam/dlpfc_3.transcriptome.sam
+    shell:
+        
+        samtools fastq bam/dlpfc_3.bam > bam/dlpfc_3.fq
+
+        minimap2 -t 16 -ax splice:hq             -uf --MD data/talon_observedOnly.sorted.fa bam/dlpfc_3.fq > bam/dlpfc_3.transcriptome.sam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Mon Apr  6 15:04:59 2026]
+Error in rule map_to_transcriptome:
+    jobid: 12
+    input: bam/dlpfc_2.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_2.fq, bam/dlpfc_2.transcriptome.sam
+    shell:
+        
+        samtools fastq bam/dlpfc_2.bam > bam/dlpfc_2.fq
+
+        minimap2 -t 16 -ax splice:hq             -uf --MD data/talon_observedOnly.sorted.fa bam/dlpfc_2.fq > bam/dlpfc_2.transcriptome.sam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job map_to_transcriptome since they might be corrupted:
+bam/dlpfc_3.fq, bam/dlpfc_3.transcriptome.sam
+[Mon Apr  6 15:04:59 2026]
+Error in rule map_to_transcriptome:
+    jobid: 5
+    input: bam/dlpfc_1.bam, data/talon_observedOnly.sorted.fa
+    output: bam/dlpfc_1.fq, bam/dlpfc_1.transcriptome.sam
+    shell:
+        
+        samtools fastq bam/dlpfc_1.bam > bam/dlpfc_1.fq
+
+        minimap2 -t 16 -ax splice:hq             -uf --MD data/talon_observedOnly.sorted.fa bam/dlpfc_1.fq > bam/dlpfc_1.transcriptome.sam
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job map_to_transcriptome since they might be corrupted:
+bam/dlpfc_2.fq, bam/dlpfc_2.transcriptome.sam
+Removing output files of failed job map_to_transcriptome since they might be corrupted:
+bam/dlpfc_1.fq, bam/dlpfc_1.transcriptome.sam
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2026-04-06T150454.856555.snakemake.log

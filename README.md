@@ -1,5 +1,5 @@
 # **isoLASER**
-[![](https://img.shields.io/badge/isoLASER-v0.0.0.1-blue)](https://test.pypi.org/project/isoLASER/)
+[![](https://img.shields.io/badge/isoLASER-v0.0.0.3-blue)](https://test.pypi.org/project/isoLASER/)
 
 
 [Publication](https://www.nature.com/articles/s41467-025-64605-6)
@@ -95,6 +95,7 @@ Assuming all library dependencies are installed already, the installation of Iso
 
 Long-read RNA sequencing is notorious for its high base-calling error rate. As such, it is important to clean and preprocess the data to discard false transcripts resulting from misalignment, bad consensus, truncation, and other technical artifacts.   
 
+Reference fasta file (e.g., hg38.fa) must be indexed (.fai and .dict).
 
 
 ### Transcript identification
@@ -165,7 +166,7 @@ isolaser_filter -m {output.prefix.mi_summary.tsv} -o {output.prefix.mi_summary.f
 
 The first step is a wrapper of GATK functions to merge the variant calls from different samples.
 
-The input file `fofn` contains informaiton of the individual samples
+The input file `fofn` contains information of the individual samples
 ```
 # fofn.tsv
 SM1 SM1.mi_summary.tsv SM1.vcf
@@ -173,7 +174,7 @@ SM2 SM2.mi_summary.tsv SM2.vcf
 ```
 Run the combine vcf step:
 ```
-isolaser_combine_vcf -f {fofn.tsv} -o {output.prefix}
+isolaser_combine_vcf -i {fofn.tsv} -o {output.prefix} -f data/hg38.fa
 
 # output:
 {output.prefix}.combined.vcf
@@ -213,6 +214,12 @@ nigiri_plot -b {fofn} -c {region} -o {output.plot}
 ## **Demo**
 
 For a complete demo please check the [test_pipeline](test_pipeline) repository.
+
+The complete pipeline is available as a snakemake workflow in the `Snakefile` of the test_pipeline repository.
+
+```
+snakemake -s  isolaser_test.smk 
+```
 
 ## **Debug**
 If you experience any issues please submit your question to the *Issues* tab on this website. 

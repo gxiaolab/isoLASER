@@ -1,2 +1,2 @@
-GTF: "data/talon_observedOnly.chr21.sorted.gz"
-REF: "data/hg38.fa"   
+GTF: "data/gencode.v32.chr21.gtf.gz"
+REF: "data/GRCh38.chr21.fa"   

@@ -6,7 +6,7 @@ configfile: "config.yaml"
 rule all:
     input:
         expand("out/isolaser.dlpfc_{i}.mi_summary.filtered.tab", i=[1, 2, 3]) + 
-        ["out/isolaser_joint.dlpfc.merged.mi_summary.tab"]
+	        ["out/isolaser_joint.dlpfc.merged.mi_summary.tab"]
 
 
 rule convert_gff_to_fasta:
