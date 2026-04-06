@@ -168,8 +168,8 @@ The first step is a wrapper of GATK functions to merge the variant calls from di
 The input file `fofn` contains informaiton of the individual samples
 ```
 # fofn.tsv
-SM1 SM1.bam SM1.mi_summary.tsv
-SM2 SM2.bam SM2.mi_summary.tsv
+SM1 SM1.mi_summary.tsv SM1.vcf
+SM2 SM2.mi_summary.tsv SM2.vcf
 ```
 Run the combine vcf step:
 ```
@@ -181,7 +181,7 @@ isolaser_combine_vcf -f {fofn.tsv} -o {output.prefix}
 ```
 Perform joint analysis
 ```
-isolaser_joint -f {fofn.tsv} -o {output.prefix} -t {transcript.db}
+isolaser_joint -i {fofn.tsv} -o {output.prefix} -t {transcript.db} -v {output.prefix}.genotyped.vcf
 
 # output:
 {output.prefix}.merged.mi_summary.tsv

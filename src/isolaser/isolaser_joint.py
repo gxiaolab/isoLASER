@@ -116,7 +116,6 @@ def read_mi(fofn_df, Gene_Id, Gene_attr):
 
     for metadata_row in fofn_df.itertuples():
 
-
         mi_tabix = tabix.open(metadata_row.mi)
         header = pd.read_csv(metadata_row.mi, nrows = 0, sep = '\t').columns
         records = list(mi_tabix.query(CHROM, int(START), int(END)))
@@ -328,7 +327,6 @@ def main():
     gene_lst = gqv_gff_utils.get_genes_from_gtf(options.transcript_db)
 
     df = pd.read_table(options.fofn, header = None, names = ["sm", "mi", "vcf"], sep = "\t") 
-
     merge_mi_summary_files(df, options.vcf, options.outf, polyfits, normalfits, gene_lst)
     sys.stderr.write(f"\t[Progress] done\n" ); sys.stderr.flush()
 
