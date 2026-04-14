@@ -156,10 +156,16 @@ isolaser -b {input.annot.bam} -o {output.prefix} -t {transcript.db} -f {referenc
 ```
 
 The output is very extensive and includes information that is only relevant for the joint analysis or plotting. 
+Compress the mi_summary.tsv file for downstream analysis and plotting:
+
+```
+less {output.prefix}.mi_summary.tsv | sort -k1,1V -k2,2n -k3,3n | bgzip -c -f > {output.prefix}.mi_summary.tsv.gz
+tabix -f -p bed {output.prefix}.mi_summary.tsv.gz
+```
 To obtain the significant allele-specific events (cis-directed splicing events) use the filter function: 
 
 ```
-isolaser_filter -m {output.prefix.mi_summary.tsv} -o {output.prefix.mi_summary.filtered.tsv}
+isolaser_filter -m {output.prefix}.mi_summary.tsv.gz -o {output.prefix}.mi_summary.filtered.tsv.gz
 ```
 
 ## *Run IsoLASER joint*
@@ -169,8 +175,8 @@ The first step is a wrapper of GATK functions to merge the variant calls from di
 The input file `fofn` contains information of the individual samples
 ```
 # fofn.tsv
-SM1 SM1.mi_summary.tsv SM1.vcf
-SM2 SM2.mi_summary.tsv SM2.vcf
+SM1 SM1.mi_summary.tsv.gz SM1.gvcf
+SM2 SM2.mi_summary.tsv.gz SM2.gvcf
 ```
 Run the combine vcf step:
 ```
